@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empty state: Pesquisar Clientes — Cadastro</title>
+  <link rel="stylesheet" href="../../../_biblioteca/sakai.css">
+</head>
+<body>
+
+<div class="prototype-badge">🎨 EMPTY STATE — Protótipo</div>
+
+<header class="layout-topbar">
+  <div class="layout-topbar-logo-container">
+    <a class="layout-topbar-logo" href="#">
+      <span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5"/><path d="M7 12h10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></span>
+      <span>Sistema</span>
+    </a>
+  </div>
+  <div class="layout-topbar-actions">
+    <span style="font-size:.875rem;color:var(--text-muted-color)">Ana Costa</span>
+    <span class="p-avatar p-avatar-primary">AC</span>
+  </div>
+</header>
+
+<aside class="layout-sidebar">
+  <ul class="layout-menu">
+    <li><span class="layout-menuitem-root-text">Clientes</span>
+      <ul>
+        <li><a class="active-route" href="#"><svg class="menu-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Pesquisar Clientes</a></li>
+        <li><a href="#"><svg class="menu-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Cadastrar Cliente</a></li>
+      </ul>
+    </li>
+    <li><span class="layout-menuitem-root-text">Contratos</span>
+      <ul><li><a href="#"><svg class="menu-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Listar Contratos</a></li></ul>
+    </li>
+  </ul>
+</aside>
+
+<div class="layout-main-container">
+  <main class="layout-main">
+
+    <nav class="p-breadcrumb" aria-label="Navegação">
+      <a href="#">Início</a><span class="p-breadcrumb-sep">›</span>
+      <a href="#">Clientes</a><span class="p-breadcrumb-sep">›</span>
+      <a href="#">Cadastro</a><span class="p-breadcrumb-sep">›</span>
+      <span class="p-breadcrumb-current">Pesquisar Clientes</span>
+    </nav>
+
+    <div class="page-header">
+      <h1 class="page-title">Pesquisar Clientes</h1>
+      <p class="page-subtitle">Use os filtros abaixo para localizar clientes cadastrados</p>
+    </div>
+
+    <!-- Filtros permanecem visíveis para facilitar o ajuste -->
+    <div class="card p-fluid">
+      <div class="card-title">Filtros de pesquisa</div>
+      <div class="grid grid-cols-3 gap-6">
+        <div class="p-field"><label for="cpf">CPF <span class="optional">(opcional)</span></label><input id="cpf" class="p-inputtext" type="text" placeholder="000.000.000-00" value="999.999.999-99"></div>
+        <div class="p-field"><label for="nome">Nome <span class="optional">(opcional)</span></label><input id="nome" class="p-inputtext" type="text" placeholder="Digite o nome ou parte do nome" value="Zeferino"></div>
+        <div class="p-field"><label for="email">E-mail <span class="optional">(opcional)</span></label><input id="email" class="p-inputtext" type="email" placeholder="exemplo@dominio.com.br"></div>
+        <div class="p-field"><label for="status">Status</label><select id="status" class="p-inputtext p-select"><option>Inativo</option></select></div>
+        <div class="p-field"><label for="data-inicio">Cadastrado a partir de <span class="optional">(opcional)</span></label><input id="data-inicio" class="p-inputtext" type="date" value="2020-01-01"></div>
+        <div class="p-field"><label for="data-fim">Cadastrado até <span class="optional">(opcional)</span></label><input id="data-fim" class="p-inputtext" type="date" value="2020-12-31"></div>
+      </div>
+      <div class="flex justify-end gap-2 mt-4">
+        <button class="p-button p-button-text p-button-secondary">Limpar filtros</button>
+        <button class="p-button">
+          <svg class="p-button-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Pesquisar
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty state: resultado de pesquisa/filtro vazio -->
+    <div class="card">
+      <div class="p-empty-state" role="status" aria-live="polite">
+        <!-- Ícone ilustrativo — reduz carga cognitiva -->
+        <svg class="p-empty-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M8 11h6M11 8v6" opacity=".4"/></svg>
+        <!-- Título positivo: foco no que a pessoa pode FAZER -->
+        <div class="p-empty-title">Nenhum cliente encontrado com esses filtros</div>
+        <!-- Descrição orientadora -->
+        <div class="p-empty-desc">Tente ajustar os critérios da pesquisa para ampliar os resultados.</div>
+
+        <!-- Dica prática — nunca deixar a pessoa num "beco sem saída" -->
+        <div class="p-message p-message-info" style="text-align:left;max-width:32rem;margin-top:1rem">
+          <svg class="p-message-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <div>
+            <strong>O que você pode fazer:</strong>
+            <ul style="margin:.5rem 0 0 1.1rem">
+              <li>Verifique se o CPF foi digitado corretamente</li>
+              <li>Tente pesquisar apenas pelo nome, sem outros filtros</li>
+              <li>Amplie o período de cadastro</li>
+              <li>Selecione "Todos os status" para ver clientes em qualquer situação</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Botão de saída — sempre oferecer ação corretiva -->
+        <button class="p-button p-button-outlined p-button-secondary" style="margin-top:1rem">
+          <svg class="p-button-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+          Limpar filtros e pesquisar novamente
+        </button>
+      </div>
+    </div>
+
+    <div class="prototype-notes" role="note">
+      <strong>📋 Notas — Empty state (resultado de pesquisa vazio):</strong>
+      <ul>
+        <li>Tipo: "ausência de dados por ação da pessoa usuária (filtro)" — guia UX Writing p.214</li>
+        <li>Título positivo: foca no que pode ser feito, não no que faltou ("Nenhum cliente encontrado com esses filtros", não "Sua pesquisa não retornou resultados")</li>
+        <li>Lista de dicas: nunca deixar a pessoa num "beco sem saída" — guia p.215</li>
+        <li>Filtros permanecem visíveis para facilitar o ajuste sem recarregar a página</li>
+        <li>Se for primeiro uso (sem nenhum cliente cadastrado ainda), exibir empty-state diferente com botão "Cadastrar Cliente"</li>
+      </ul>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

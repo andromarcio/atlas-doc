@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulário: Pesquisar Clientes — Cadastro</title>
+  <!-- Biblioteca de componentes (sakai-ng) -->
+  <link rel="stylesheet" href="../../../_biblioteca/sakai.css">
+</head>
+<body>
+
+<div class="prototype-badge">🎨 FORMULÁRIO — Protótipo</div>
+
+<!-- Topbar -->
+<header class="layout-topbar">
+  <div class="layout-topbar-logo-container">
+    <a class="layout-topbar-logo" href="#">
+      <span class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5"/><path d="M7 12h10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      </span>
+      <span>Sistema</span>
+    </a>
+  </div>
+  <div class="layout-topbar-actions">
+    <span style="font-size:.875rem;color:var(--text-muted-color)">Ana Costa</span>
+    <span class="p-avatar p-avatar-primary">AC</span>
+  </div>
+</header>
+
+<!-- Sidebar flutuante -->
+<aside class="layout-sidebar">
+  <ul class="layout-menu">
+    <li>
+      <span class="layout-menuitem-root-text">Clientes</span>
+      <ul>
+        <li><a class="active-route" href="#"><svg class="menu-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Pesquisar Clientes</a></li>
+        <li><a href="#"><svg class="menu-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Cadastrar Cliente</a></li>
+      </ul>
+    </li>
+    <li>
+      <span class="layout-menuitem-root-text">Contratos</span>
+      <ul>
+        <li><a href="#"><svg class="menu-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Listar Contratos</a></li>
+      </ul>
+    </li>
+  </ul>
+</aside>
+
+<div class="layout-main-container">
+  <main class="layout-main">
+
+    <!-- Breadcrumb -->
+    <nav class="p-breadcrumb" aria-label="Navegação">
+      <a href="#">Início</a><span class="p-breadcrumb-sep">›</span>
+      <a href="#">Clientes</a><span class="p-breadcrumb-sep">›</span>
+      <a href="#">Cadastro</a><span class="p-breadcrumb-sep">›</span>
+      <span class="p-breadcrumb-current">Pesquisar Clientes</span>
+    </nav>
+
+    <div class="page-header">
+      <!-- H1 — título descritivo da página, nunca vago -->
+      <h1 class="page-title">Pesquisar Clientes</h1>
+      <p class="page-subtitle">Use os filtros abaixo para localizar clientes cadastrados</p>
+    </div>
+
+    <!-- Card de filtros -->
+    <div class="card p-fluid">
+      <div class="card-title">Filtros de pesquisa</div>
+      <div class="grid grid-cols-3 gap-6">
+
+        <!-- CPF — campo com erro de validação -->
+        <div class="p-field">
+          <label for="cpf">CPF <span class="optional">(opcional)</span></label>
+          <input id="cpf" class="p-inputtext p-invalid" type="text" placeholder="000.000.000-00" value="123.456.789-0" aria-describedby="cpf-error">
+          <!-- Erro próximo ao campo, com cor + ícone + texto (nunca só cor) -->
+          <span id="cpf-error" class="p-error" role="alert">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+            CPF inválido. Verifique os dígitos e tente de novo
+          </span>
+        </div>
+
+        <!-- Nome -->
+        <div class="p-field">
+          <label for="nome">Nome <span class="optional">(opcional)</span></label>
+          <input id="nome" class="p-inputtext" type="text" placeholder="Digite o nome ou parte do nome">
+        </div>
+
+        <!-- E-mail -->
+        <div class="p-field">
+          <label for="email">E-mail <span class="optional">(opcional)</span></label>
+          <input id="email" class="p-inputtext" type="email" placeholder="exemplo@dominio.com.br">
+        </div>
+
+        <!-- Status -->
+        <div class="p-field">
+          <label for="status">Status</label>
+          <select id="status" class="p-inputtext p-select">
+            <option value="">Todos os status</option>
+            <option value="ativo">Ativo</option>
+            <option value="inativo">Inativo</option>
+            <option value="pendente">Pendente de aprovação</option>
+          </select>
+          <small class="p-help">Exibe clientes em todos os status quando não selecionado</small>
+        </div>
+
+        <!-- Período de cadastro -->
+        <div class="p-field">
+          <label for="data-inicio">Cadastrado a partir de <span class="optional">(opcional)</span></label>
+          <input id="data-inicio" class="p-inputtext" type="date">
+        </div>
+        <div class="p-field">
+          <label for="data-fim">Cadastrado até <span class="optional">(opcional)</span></label>
+          <input id="data-fim" class="p-inputtext" type="date">
+        </div>
+
+      </div>
+
+      <!-- Ações do formulário — primário à direita, cancelar/ghost à esquerda -->
+      <div class="flex justify-end gap-2 mt-4">
+        <button class="p-button p-button-text p-button-secondary" type="button" aria-label="Limpar todos os filtros">Limpar filtros</button>
+        <button class="p-button" type="submit">
+          <svg class="p-button-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Pesquisar
+        </button>
+      </div>
+    </div>
+
+    <!-- Resultados -->
+    <div class="card">
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-muted-color"><strong style="color:var(--text-color)">48 clientes</strong> encontrados</span>
+        <div class="flex gap-2">
+          <!-- Verbo claro: "Exportar lista" em vez de só "Exportar" -->
+          <button class="p-button p-button-outlined p-button-secondary p-button-sm">
+            <svg class="p-button-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Exportar lista
+          </button>
+          <button class="p-button p-button-sm">
+            <svg class="p-button-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Cadastrar Cliente
+          </button>
+        </div>
+      </div>
+
+      <!-- Coluna de ações sempre na última coluna -->
+      <table class="p-datatable">
+        <thead>
+          <tr>
+            <th>Nome</th><th>CPF</th><th>E-mail</th><th>Cadastrado em</th><th>Status</th><th class="p-column-actions">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Maria Aparecida Santos</td><td>123.456.789-09</td><td>maria.santos@email.com.br</td><td>12/03/2025</td>
+            <td><span class="p-tag p-tag-success">Ativo</span></td>
+            <td class="p-column-actions"><button class="p-button p-button-text p-button-sm">Visualizar</button></td>
+          </tr>
+          <tr>
+            <td>João Pedro Oliveira</td><td>987.654.321-00</td><td>joao.oliveira@email.com.br</td><td>05/02/2025</td>
+            <td><span class="p-tag p-tag-warn">Pendente de aprovação</span></td>
+            <td class="p-column-actions"><button class="p-button p-button-text p-button-sm">Visualizar</button></td>
+          </tr>
+          <tr>
+            <td>Ana Luiza Ferreira</td><td>456.789.123-44</td><td>ana.ferreira@email.com.br</td><td>28/01/2025</td>
+            <td><span class="p-tag p-tag-secondary">Inativo</span></td>
+            <td class="p-column-actions"><button class="p-button p-button-text p-button-sm">Visualizar</button></td>
+          </tr>
+          <tr>
+            <td>Carlos Eduardo Mendes</td><td>321.654.987-11</td><td>carlos.mendes@email.com.br</td><td>14/01/2025</td>
+            <td><span class="p-tag p-tag-success">Ativo</span></td>
+            <td class="p-column-actions"><button class="p-button p-button-text p-button-sm">Visualizar</button></td>
+          </tr>
+          <tr>
+            <td>Fernanda Lima Costa</td><td>654.321.098-22</td><td>fernanda.costa@email.com.br</td><td>02/01/2025</td>
+            <td><span class="p-tag p-tag-success">Ativo</span></td>
+            <td class="p-column-actions"><button class="p-button p-button-text p-button-sm">Visualizar</button></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Paginação no rodapé da tabela -->
+      <div class="flex items-center justify-between mt-4">
+        <span class="text-muted-color" style="font-size:.8125rem">Exibindo 1–5 de 48 clientes</span>
+        <div class="p-paginator" role="navigation" aria-label="Paginação">
+          <button class="p-paginator-nav" aria-label="Página anterior">‹</button>
+          <button class="p-paginator-page p-selected" aria-current="page">1</button>
+          <button class="p-paginator-page">2</button>
+          <button class="p-paginator-page">3</button>
+          <button class="p-paginator-page">…</button>
+          <button class="p-paginator-page">10</button>
+          <button class="p-paginator-nav" aria-label="Próxima página">›</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notas do protótipo -->
+    <div class="prototype-notes" role="note">
+      <strong>📋 Notas — Formulário com resultados:</strong>
+      <ul>
+        <li>Pesquisa disparada ao clicar em "Pesquisar" — não em tempo real</li>
+        <li>CPF valida formato ao sair do campo (onBlur), não ao digitar</li>
+        <li>Linha da tabela clicável → navega para o detalhe do cliente</li>
+        <li>"Exportar lista" exporta todos os 48 resultados, não apenas a página atual</li>
+        <li>Paginação cursor-based — 20 itens por página conforme padrão global</li>
+        <li>UX Writing: erro de CPF exibido com ícone + texto (não só cor)</li>
+      </ul>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

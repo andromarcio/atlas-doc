@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading: Pesquisar Clientes — Cadastro</title>
+  <link rel="stylesheet" href="../../../_biblioteca/sakai.css">
+  <style>
+    /* Spinner do texto de transição (não faz parte da biblioteca) */
+    .loading-status { display:flex; align-items:center; gap:.5rem; color:var(--text-muted-color); margin-bottom:1rem; }
+    .spinner { width:1rem; height:1rem; border:2px solid var(--surface-border); border-top-color:var(--primary-color); border-radius:50%; animation:spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<div class="prototype-badge">🎨 LOADING — Protótipo</div>
+
+<header class="layout-topbar">
+  <div class="layout-topbar-logo-container">
+    <a class="layout-topbar-logo" href="#">
+      <span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5"/><path d="M7 12h10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></span>
+      <span>Sistema</span>
+    </a>
+  </div>
+  <div class="layout-topbar-actions">
+    <span style="font-size:.875rem;color:var(--text-muted-color)">Ana Costa</span>
+    <span class="p-avatar p-avatar-primary">AC</span>
+  </div>
+</header>
+
+<aside class="layout-sidebar">
+  <ul class="layout-menu">
+    <li><span class="layout-menuitem-root-text">Clientes</span>
+      <ul>
+        <li><a class="active-route" href="#"><svg class="menu-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Pesquisar Clientes</a></li>
+        <li><a href="#"><svg class="menu-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Cadastrar Cliente</a></li>
+      </ul>
+    </li>
+    <li><span class="layout-menuitem-root-text">Contratos</span>
+      <ul><li><a href="#"><svg class="menu-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Listar Contratos</a></li></ul>
+    </li>
+  </ul>
+</aside>
+
+<div class="layout-main-container">
+  <main class="layout-main">
+
+    <nav class="p-breadcrumb" aria-label="Navegação">
+      <a href="#">Início</a><span class="p-breadcrumb-sep">›</span>
+      <a href="#">Clientes</a><span class="p-breadcrumb-sep">›</span>
+      <a href="#">Cadastro</a><span class="p-breadcrumb-sep">›</span>
+      <span class="p-breadcrumb-current">Pesquisar Clientes</span>
+    </nav>
+
+    <div class="page-header">
+      <h1 class="page-title">Pesquisar Clientes</h1>
+      <p class="page-subtitle">Use os filtros abaixo para localizar clientes cadastrados</p>
+    </div>
+
+    <!-- Filtros desabilitados durante loading -->
+    <div class="card p-fluid">
+      <div class="card-title">Filtros de pesquisa</div>
+      <div class="grid grid-cols-3 gap-6">
+        <div class="p-field"><div class="p-skeleton" style="width:40%;height:.85rem"></div><div class="p-skeleton" style="height:2.5rem"></div></div>
+        <div class="p-field"><div class="p-skeleton" style="width:40%;height:.85rem"></div><div class="p-skeleton" style="height:2.5rem"></div></div>
+        <div class="p-field"><div class="p-skeleton" style="width:40%;height:.85rem"></div><div class="p-skeleton" style="height:2.5rem"></div></div>
+        <div class="p-field"><div class="p-skeleton" style="width:40%;height:.85rem"></div><div class="p-skeleton" style="height:2.5rem"></div></div>
+        <div class="p-field"><div class="p-skeleton" style="width:40%;height:.85rem"></div><div class="p-skeleton" style="height:2.5rem"></div></div>
+        <div class="p-field"><div class="p-skeleton" style="width:40%;height:.85rem"></div><div class="p-skeleton" style="height:2.5rem"></div></div>
+      </div>
+      <div class="flex justify-end gap-2 mt-4">
+        <button class="p-button p-button-text p-button-secondary" disabled>Limpar filtros</button>
+        <button class="p-button" disabled>Pesquisar</button>
+      </div>
+    </div>
+
+    <!-- Resultados — skeleton com proporção equivalente ao conteúdo real -->
+    <div class="card">
+
+      <!-- Texto de transição: verbo no gerúndio + reticências + spinner -->
+      <div class="loading-status" role="status" aria-live="polite">
+        <span class="spinner"></span>
+        <span>Buscando clientes...</span>
+      </div>
+
+      <div class="flex items-center justify-between mb-4">
+        <div class="p-skeleton" style="width:9rem;height:.9rem"></div>
+        <div class="flex gap-2">
+          <div class="p-skeleton" style="height:2.25rem;width:8rem"></div>
+          <div class="p-skeleton" style="height:2.25rem;width:9rem"></div>
+        </div>
+      </div>
+
+      <!-- Skeleton da tabela — mesma proporção das linhas reais -->
+      <table class="p-datatable" aria-hidden="true">
+        <thead>
+          <tr>
+            <th><div class="p-skeleton" style="width:60%"></div></th>
+            <th><div class="p-skeleton" style="width:50%"></div></th>
+            <th><div class="p-skeleton" style="width:80%"></div></th>
+            <th><div class="p-skeleton" style="width:60%"></div></th>
+            <th><div class="p-skeleton" style="width:40%"></div></th>
+            <th><div class="p-skeleton" style="width:40%"></div></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><div class="p-skeleton" style="width:80%"></div></td><td><div class="p-skeleton" style="width:60%"></div></td><td><div class="p-skeleton" style="width:80%"></div></td><td><div class="p-skeleton" style="width:45%"></div></td><td><div class="p-skeleton" style="height:1.4rem;width:3.5rem;border-radius:1rem"></div></td><td><div class="p-skeleton" style="height:1.8rem;width:5rem"></div></td></tr>
+          <tr><td><div class="p-skeleton" style="width:65%"></div></td><td><div class="p-skeleton" style="width:60%"></div></td><td><div class="p-skeleton" style="width:80%"></div></td><td><div class="p-skeleton" style="width:45%"></div></td><td><div class="p-skeleton" style="height:1.4rem;width:3.5rem;border-radius:1rem"></div></td><td><div class="p-skeleton" style="height:1.8rem;width:5rem"></div></td></tr>
+          <tr><td><div class="p-skeleton" style="width:80%"></div></td><td><div class="p-skeleton" style="width:60%"></div></td><td><div class="p-skeleton" style="width:65%"></div></td><td><div class="p-skeleton" style="width:45%"></div></td><td><div class="p-skeleton" style="height:1.4rem;width:3.5rem;border-radius:1rem"></div></td><td><div class="p-skeleton" style="height:1.8rem;width:5rem"></div></td></tr>
+          <tr><td><div class="p-skeleton" style="width:65%"></div></td><td><div class="p-skeleton" style="width:60%"></div></td><td><div class="p-skeleton" style="width:80%"></div></td><td><div class="p-skeleton" style="width:45%"></div></td><td><div class="p-skeleton" style="height:1.4rem;width:3.5rem;border-radius:1rem"></div></td><td><div class="p-skeleton" style="height:1.8rem;width:5rem"></div></td></tr>
+          <tr><td><div class="p-skeleton" style="width:80%"></div></td><td><div class="p-skeleton" style="width:60%"></div></td><td><div class="p-skeleton" style="width:65%"></div></td><td><div class="p-skeleton" style="width:45%"></div></td><td><div class="p-skeleton" style="height:1.4rem;width:3.5rem;border-radius:1rem"></div></td><td><div class="p-skeleton" style="height:1.8rem;width:5rem"></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prototype-notes" role="note">
+      <strong>📋 Notas — Loading:</strong>
+      <ul>
+        <li>Skeleton com mesma estrutura e proporção do conteúdo real — nunca spinner genérico isolado</li>
+        <li>Texto de transição: verbo específico no gerúndio + reticências (guia UX Writing)</li>
+        <li>Spinner acompanha o texto — elemento visual obrigatório junto ao texto de transição</li>
+        <li>Para ações acima de 5s: atualizar status ("Ainda buscando... pode demorar mais um pouco")</li>
+        <li>Botões desabilitados durante carregamento — cursor not-allowed</li>
+      </ul>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

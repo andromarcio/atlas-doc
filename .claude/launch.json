@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "generated-components",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "generated-components", "--listen", "3456", "--no-clipboard"],
+      "port": 3456
+    },
+    {
+      "name": "prototypes",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", ".", "--listen", "4399", "--no-clipboard"],
+      "port": 4399
+    }
+  ]
+}

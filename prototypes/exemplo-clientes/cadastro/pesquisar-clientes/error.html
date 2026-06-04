@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Erro de servidor: Pesquisar Clientes — Cadastro</title>
+  <link rel="stylesheet" href="../../../_biblioteca/sakai.css">
+</head>
+<body>
+
+<div class="prototype-badge">🎨 ERRO DE SERVIDOR — Protótipo</div>
+
+<header class="layout-topbar">
+  <div class="layout-topbar-logo-container">
+    <a class="layout-topbar-logo" href="#">
+      <span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5"/><path d="M7 12h10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></span>
+      <span>Sistema</span>
+    </a>
+  </div>
+  <div class="layout-topbar-actions">
+    <span style="font-size:.875rem;color:var(--text-muted-color)">Ana Costa</span>
+    <span class="p-avatar p-avatar-primary">AC</span>
+  </div>
+</header>
+
+<aside class="layout-sidebar">
+  <ul class="layout-menu">
+    <li><span class="layout-menuitem-root-text">Clientes</span>
+      <ul>
+        <li><a class="active-route" href="#"><svg class="menu-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Pesquisar Clientes</a></li>
+        <li><a href="#"><svg class="menu-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Cadastrar Cliente</a></li>
+      </ul>
+    </li>
+    <li><span class="layout-menuitem-root-text">Contratos</span>
+      <ul><li><a href="#"><svg class="menu-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Listar Contratos</a></li></ul>
+    </li>
+  </ul>
+</aside>
+
+<div class="layout-main-container">
+  <main class="layout-main">
+
+    <nav class="p-breadcrumb" aria-label="Navegação">
+      <a href="#">Início</a><span class="p-breadcrumb-sep">›</span>
+      <a href="#">Clientes</a><span class="p-breadcrumb-sep">›</span>
+      <a href="#">Cadastro</a><span class="p-breadcrumb-sep">›</span>
+      <span class="p-breadcrumb-current">Pesquisar Clientes</span>
+    </nav>
+
+    <div class="page-header">
+      <h1 class="page-title">Pesquisar Clientes</h1>
+      <p class="page-subtitle">Use os filtros abaixo para localizar clientes cadastrados</p>
+    </div>
+
+    <!-- Mensagem inline de erro — tom sério, calmo, nunca culpa a pessoa usuária -->
+    <div class="p-message p-message-error" role="alert" aria-live="assertive">
+      <svg class="p-message-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div>
+        <strong>Não foi possível carregar os resultados</strong><br>
+        Ocorreu uma instabilidade no serviço. Seus filtros foram mantidos — tente pesquisar novamente.
+      </div>
+    </div>
+
+    <!-- Filtros mantidos após o erro — pessoa não perde o que digitou -->
+    <div class="card p-fluid">
+      <div class="card-title">Filtros de pesquisa</div>
+      <div class="grid grid-cols-3 gap-6">
+        <div class="p-field"><label for="cpf">CPF <span class="optional">(opcional)</span></label><input id="cpf" class="p-inputtext" type="text" value="123.456.789-09"></div>
+        <div class="p-field"><label for="nome">Nome <span class="optional">(opcional)</span></label><input id="nome" class="p-inputtext" type="text" value="Maria"></div>
+        <div class="p-field"><label for="email">E-mail <span class="optional">(opcional)</span></label><input id="email" class="p-inputtext" type="email" placeholder="exemplo@dominio.com.br"></div>
+        <div class="p-field"><label for="status">Status</label><select id="status" class="p-inputtext p-select"><option>Ativo</option></select></div>
+        <div class="p-field"><label for="data-inicio">Cadastrado a partir de <span class="optional">(opcional)</span></label><input id="data-inicio" class="p-inputtext" type="date"></div>
+        <div class="p-field"><label for="data-fim">Cadastrado até <span class="optional">(opcional)</span></label><input id="data-fim" class="p-inputtext" type="date"></div>
+      </div>
+      <div class="flex justify-end gap-2 mt-4">
+        <button class="p-button p-button-text p-button-secondary">Limpar filtros</button>
+        <button class="p-button">
+          <svg class="p-button-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Pesquisar
+        </button>
+      </div>
+    </div>
+
+    <!-- Error state na área de resultados -->
+    <div class="card">
+      <div class="p-error-state" role="status">
+        <!-- Ícone de erro -->
+        <svg class="p-error-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+        <!-- Título: explica o que aconteceu sem culpar a pessoa usuária -->
+        <div class="p-error-title">Não conseguimos carregar os resultados</div>
+        <!-- Descrição: orienta o próximo passo — nunca mensagem genérica -->
+        <div class="p-error-desc">
+          Houve uma instabilidade temporária no serviço de busca.
+          Aguarde alguns instantes e tente novamente. Se o problema
+          persistir, entre em contato com o suporte.
+        </div>
+        <!-- Botões com verbos claros — nunca "OK" -->
+        <div class="flex gap-2" style="margin-top:1rem">
+          <button class="p-button p-button-text p-button-secondary">Falar com o suporte</button>
+          <button class="p-button">
+            <svg class="p-button-icon" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Tentar novamente
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="prototype-notes" role="note">
+      <strong>📋 Notas — Erro de servidor:</strong>
+      <ul>
+        <li>Categoria: Barreira — bloqueio na experiência, pessoa precisa agir (guia UX Writing p.208)</li>
+        <li>Tom: sério, claro e calmo — jamais culpar a pessoa usuária (guia p.207)</li>
+        <li>Título específico: "Não conseguimos carregar os resultados" — nunca "Ocorreu um erro" ou "Falha na operação"</li>
+        <li>Filtros mantidos após o erro — pessoa não perde o que digitou (princípio de prevenção de erros)</li>
+        <li>Erro sinalizado com ícone + cor + texto (nunca só cor)</li>
+        <li>Botão "Tentar novamente" com verbo claro; "Falar com o suporte" como alternativa secundária</li>
+        <li>Mensagem inline no topo reforça o feedback imediato antes do error state da tabela</li>
+      </ul>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

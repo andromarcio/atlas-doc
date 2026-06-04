@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Button – Design System</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #fff;
+    padding: 32px;
+    color: #1a1a1a;
+  }
+
+  h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #555; margin-bottom: 32px; }
+
+  .variant-section { margin-bottom: 48px; }
+  .variant-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a4fa0;
+    margin-bottom: 16px;
+  }
+
+  /* Table layout */
+  .btn-table {
+    border: 1.5px dashed #c5d3e8;
+    border-radius: 8px;
+    padding: 16px;
+    display: inline-grid;
+    grid-template-columns: 80px repeat(5, 1fr);
+    gap: 12px 20px;
+    align-items: center;
+  }
+
+  .col-header {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a4fa0;
+    text-align: center;
+  }
+
+  .row-header {
+    font-size: 11px;
+    color: #444;
+    text-align: right;
+    padding-right: 8px;
+  }
+
+  .row-group-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #444;
+    grid-column: 1;
+    align-self: center;
+  }
+
+  .btn-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* ─── Base button ─── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    line-height: 1;
+    transition: background 0.15s, box-shadow 0.15s, opacity 0.15s;
+    white-space: nowrap;
+  }
+
+  /* Sizes */
+  .btn-sm       { font-size: 11px; padding: 5px 10px; }
+  .btn-md       { font-size: 13px; padding: 7px 14px; }
+  .btn-lg       { font-size: 15px; padding: 10px 20px; }
+
+  .btn-icon-sm  { width: 26px; height: 26px; padding: 0; }
+  .btn-icon-md  { width: 32px; height: 32px; padding: 0; }
+  .btn-icon-lg  { width: 40px; height: 40px; padding: 0; }
+
+  /* Icon placeholder */
+  .icon {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid currentColor;
+    border-radius: 2px;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .btn-lg .icon { width: 16px; height: 16px; }
+
+  /* ─── PRIMARY ─── */
+  .btn-primary              { background: #c87c00; color: #fff; }
+  .btn-primary.state-hover  { background: #a86800; color: #fff; }
+  .btn-primary.state-active { background: #8f5800; color: #fff; }
+  .btn-primary.state-focus  { background: #c87c00; color: #fff; box-shadow: 0 0 0 3px rgba(200,124,0,0.35); outline: 2px solid #c87c00; }
+  .btn-primary.state-disabled { background: #d4d4d4; color: #a0a0a0; cursor: not-allowed; }
+
+  /* ─── SECONDARY ─── */
+  .btn-secondary              { background: #1a4fa0; color: #fff; }
+  .btn-secondary.state-hover  { background: #153f82; color: #fff; }
+  .btn-secondary.state-active { background: #0f2f61; color: #fff; }
+  .btn-secondary.state-focus  { background: #1a4fa0; color: #fff; box-shadow: 0 0 0 3px rgba(26,79,160,0.35); outline: 2px solid #1a4fa0; }
+  .btn-secondary.state-disabled { background: #d4d4d4; color: #a0a0a0; cursor: not-allowed; }
+
+  /* ─── SECONDARY OUTLINED ─── */
+  .btn-outlined              { background: #fff; color: #1a4fa0; border: 1.5px solid #1a4fa0; }
+  .btn-outlined.state-hover  { background: #eef3fb; color: #1a4fa0; border-color: #1a4fa0; }
+  .btn-outlined.state-active { background: #dde8f7; color: #1a4fa0; border-color: #1a4fa0; }
+  .btn-outlined.state-focus  { background: #fff; color: #1a4fa0; border-color: #1a4fa0; box-shadow: 0 0 0 3px rgba(26,79,160,0.25); outline: 2px solid #1a4fa0; }
+  .btn-outlined.state-disabled { background: #fff; color: #b0b0b0; border-color: #d0d0d0; cursor: not-allowed; }
+
+  /* ─── SECONDARY TEXT ─── */
+  .btn-text              { background: transparent; color: #1a4fa0; border: 1.5px solid transparent; }
+  .btn-text.state-hover  { background: #eef3fb; color: #1a4fa0; }
+  .btn-text.state-active { background: #dde8f7; color: #1a4fa0; }
+  .btn-text.state-focus  { background: transparent; color: #1a4fa0; box-shadow: 0 0 0 3px rgba(26,79,160,0.25); outline: 2px solid #1a4fa0; }
+  .btn-text.state-disabled { color: #b0b0b0; cursor: not-allowed; }
+
+  /* bottom grid row layout */
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 40px;
+    align-items: start;
+  }
+</style>
+</head>
+<body>
+
+<h1>Button</h1>
+<p class="subtitle">Componente para utilização nos projetos.</p>
+
+<!-- PRIMARY -->
+<div class="variant-section">
+  <div class="variant-title">Primary</div>
+  <div class="btn-table">
+    <!-- Headers -->
+    <div></div>
+    <div class="col-header">Default</div>
+    <div class="col-header">Hover</div>
+    <div class="col-header">Active</div>
+    <div class="col-header">Focus</div>
+    <div class="col-header">Disabled</div>
+
+    <!-- Standard / with label -->
+    <div class="row-header" style="grid-column:1">Standard<br><span style="font-weight:400">with label</span></div>
+    <div class="btn-cell"><button class="btn btn-md btn-primary">Botão</button></div>
+    <div class="btn-cell"><button class="btn btn-md btn-primary state-hover">Botão</button></div>
+    <div class="btn-cell"><button class="btn btn-md btn-primary state-active">Botão</button></div>
+    <div class="btn-cell"><button class="btn btn-md btn-primary state-focus">Botão</button></div>
+    <div class="btn-cell"><button class="btn btn-md btn-primary state-disabled" disabled>Botão</button></div>
+
+    <!-- Standard / icon only -->
+    <div class="row-header">icon only</div>
+    <div class="btn-cell"><button class="btn btn-icon-md btn-primary"><span class="icon"></span></button></div>
+    <div class="btn-cell"><button class="btn btn-icon-md btn-primary state-hover"><span class="icon"></span></button></div>
+    <div class="btn-cell"><button class="btn btn-icon-md btn-primary state-active"><span class="icon"></span></button></div>
+    <div class="btn-cell"><button class="btn btn-icon-md btn-primary state-focus"><span class="icon"></span></button></div>
+    <div class="btn-cell"><button class="btn btn-icon-md btn-primary state-disabled" disabled><span class="icon"></span></button></div>
+
+    <!-- Small / with label -->
+    <div class="row-header">Small<br><span style="font-weight:400">with label</span></div>
+    <div class="btn-cell"><button class="btn btn-sm btn-primary">Botão</button></div>
+    <div class="btn-cell"><button class="btn btn-sm btn-primary state-hover">Botão</button></div>
+    <div class="btn-cell"><button class="btn btn-sm btn-primary state-active">Botão</button></div>
+    <div class="btn-cell"><button class="btn btn-sm btn-primary state-focus">Botão</button></div>
+    <div class="btn-cell"><button class="btn btn-sm btn-primary state-disabled" disabled>Botão</button></div>
+
+    <!-- Small / icon only -->
+    <div class="row-header">icon only</div>
+    <div class="btn-cell"><button class="btn btn-icon-sm btn-primary"><span class="icon"></span></button></div>
+    <div class="btn-cell"><button class="btn btn-icon-sm btn-primary state-hover"><span class="icon"></span></button></div>
+    <div class="btn-cell"><button class="btn btn-icon-sm btn-primary state-active"><span class="icon"></span></button></div>
+    <div class="btn-cell"><button class="btn btn-icon-sm btn-primary state-focus"><span class="icon"></span></button></div>
+    <div class="btn-cell"><button class="btn btn-icon-sm btn-primary state-disabled" disabled><span class="icon"></span></button></div>
+
+    <!-- Large / with label -->
+    <div class="row-header">Large<br><span style="font-weight:400">with label</span></div>
+    <div class="btn-cell"><button class="btn btn-lg btn-primary">Botão</button></div>
+    <div class="btn-cell"><button class="btn btn-lg btn-primary state-hover">Botão</button></div>
+    <div class="btn-cell"><button class="btn btn-lg btn-primary state-active">Botão</button></div>
+    <div class="btn-cell"><button class="btn btn-lg btn-primary state-focus">Botão</button></div>
+    <div class="btn-cell"><button class="btn btn-lg btn-primary state-disabled" disabled>Botão</button></div>
+
+    <!-- Large / icon only -->
+    <div class="row-header">icon only</div>
+    <div class="btn-cell"><button class="btn btn-icon-lg btn-primary"><span class="icon"></span></button></div>
+    <div class="btn-cell"><button class="btn btn-icon-lg btn-primary state-hover"><span class="icon"></span></button></div>
+    <div class="btn-cell"><button class="btn btn-icon-lg btn-primary state-active"><span class="icon"></span></button></div>
+    <div class="btn-cell"><button class="btn btn-icon-lg btn-primary state-focus"><span class="icon"></span></button></div>
+    <div class="btn-cell"><button class="btn btn-icon-lg btn-primary state-disabled" disabled><span class="icon"></span></button></div>
+  </div>
+</div>
+
+<!-- BOTTOM ROW: Secondary, Secondary Outlined, Secondary Text -->
+<div class="bottom-grid">
+
+  <!-- SECONDARY -->
+  <div class="variant-section">
+    <div class="variant-title">Secondary</div>
+    <div class="btn-table">
+      <div></div>
+      <div class="col-header">Default</div>
+      <div class="col-header">Hover</div>
+      <div class="col-header">Active</div>
+      <div class="col-header">Focus</div>
+      <div class="col-header">Disabled</div>
+
+      <div class="row-header">Standard<br><span style="font-weight:400">with label</span></div>
+      <div class="btn-cell"><button class="btn btn-md btn-secondary">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-md btn-secondary state-hover">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-md btn-secondary state-active">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-md btn-secondary state-focus">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-md btn-secondary state-disabled" disabled>Botão</button></div>
+
+      <div class="row-header">icon only</div>
+      <div class="btn-cell"><button class="btn btn-icon-md btn-secondary"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-md btn-secondary state-hover"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-md btn-secondary state-active"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-md btn-secondary state-focus"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-md btn-secondary state-disabled" disabled><span class="icon"></span></button></div>
+
+      <div class="row-header">Small<br><span style="font-weight:400">with label</span></div>
+      <div class="btn-cell"><button class="btn btn-sm btn-secondary">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-sm btn-secondary state-hover">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-sm btn-secondary state-active">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-sm btn-secondary state-focus">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-sm btn-secondary state-disabled" disabled>Botão</button></div>
+
+      <div class="row-header">icon only</div>
+      <div class="btn-cell"><button class="btn btn-icon-sm btn-secondary"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-sm btn-secondary state-hover"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-sm btn-secondary state-active"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-sm btn-secondary state-focus"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-sm btn-secondary state-disabled" disabled><span class="icon"></span></button></div>
+
+      <div class="row-header">Large<br><span style="font-weight:400">with label</span></div>
+      <div class="btn-cell"><button class="btn btn-lg btn-secondary">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-lg btn-secondary state-hover">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-lg btn-secondary state-active">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-lg btn-secondary state-focus">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-lg btn-secondary state-disabled" disabled>Botão</button></div>
+
+      <div class="row-header">icon only</div>
+      <div class="btn-cell"><button class="btn btn-icon-lg btn-secondary"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-lg btn-secondary state-hover"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-lg btn-secondary state-active"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-lg btn-secondary state-focus"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-lg btn-secondary state-disabled" disabled><span class="icon"></span></button></div>
+    </div>
+  </div>
+
+  <!-- SECONDARY OUTLINED -->
+  <div class="variant-section">
+    <div class="variant-title">Secondary Outlined</div>
+    <div class="btn-table">
+      <div></div>
+      <div class="col-header">Default</div>
+      <div class="col-header">Hover</div>
+      <div class="col-header">Active</div>
+      <div class="col-header">Focus</div>
+      <div class="col-header">Disabled</div>
+
+      <div class="row-header">Standard<br><span style="font-weight:400">with label</span></div>
+      <div class="btn-cell"><button class="btn btn-md btn-outlined">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-md btn-outlined state-hover">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-md btn-outlined state-active">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-md btn-outlined state-focus">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-md btn-outlined state-disabled" disabled>Botão</button></div>
+
+      <div class="row-header">icon only</div>
+      <div class="btn-cell"><button class="btn btn-icon-md btn-outlined"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-md btn-outlined state-hover"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-md btn-outlined state-active"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-md btn-outlined state-focus"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-md btn-outlined state-disabled" disabled><span class="icon"></span></button></div>
+
+      <div class="row-header">Small<br><span style="font-weight:400">with label</span></div>
+      <div class="btn-cell"><button class="btn btn-sm btn-outlined">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-sm btn-outlined state-hover">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-sm btn-outlined state-active">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-sm btn-outlined state-focus">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-sm btn-outlined state-disabled" disabled>Botão</button></div>
+
+      <div class="row-header">icon only</div>
+      <div class="btn-cell"><button class="btn btn-icon-sm btn-outlined"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-sm btn-outlined state-hover"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-sm btn-outlined state-active"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-sm btn-outlined state-focus"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-sm btn-outlined state-disabled" disabled><span class="icon"></span></button></div>
+
+      <div class="row-header">Large<br><span style="font-weight:400">with label</span></div>
+      <div class="btn-cell"><button class="btn btn-lg btn-outlined">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-lg btn-outlined state-hover">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-lg btn-outlined state-active">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-lg btn-outlined state-focus">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-lg btn-outlined state-disabled" disabled>Botão</button></div>
+
+      <div class="row-header">icon only</div>
+      <div class="btn-cell"><button class="btn btn-icon-lg btn-outlined"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-lg btn-outlined state-hover"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-lg btn-outlined state-active"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-lg btn-outlined state-focus"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-lg btn-outlined state-disabled" disabled><span class="icon"></span></button></div>
+    </div>
+  </div>
+
+  <!-- SECONDARY TEXT -->
+  <div class="variant-section">
+    <div class="variant-title">Secondary Text</div>
+    <div class="btn-table">
+      <div></div>
+      <div class="col-header">Default</div>
+      <div class="col-header">Hover</div>
+      <div class="col-header">Active</div>
+      <div class="col-header">Focus</div>
+      <div class="col-header">Disabled</div>
+
+      <div class="row-header">Standard<br><span style="font-weight:400">with label</span></div>
+      <div class="btn-cell"><button class="btn btn-md btn-text">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-md btn-text state-hover">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-md btn-text state-active">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-md btn-text state-focus">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-md btn-text state-disabled" disabled>Botão</button></div>
+
+      <div class="row-header">icon only</div>
+      <div class="btn-cell"><button class="btn btn-icon-md btn-text"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-md btn-text state-hover"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-md btn-text state-active"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-md btn-text state-focus"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-md btn-text state-disabled" disabled><span class="icon"></span></button></div>
+
+      <div class="row-header">Small<br><span style="font-weight:400">with label</span></div>
+      <div class="btn-cell"><button class="btn btn-sm btn-text">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-sm btn-text state-hover">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-sm btn-text state-active">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-sm btn-text state-focus">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-sm btn-text state-disabled" disabled>Botão</button></div>
+
+      <div class="row-header">icon only</div>
+      <div class="btn-cell"><button class="btn btn-icon-sm btn-text"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-sm btn-text state-hover"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-sm btn-text state-active"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-sm btn-text state-focus"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-sm btn-text state-disabled" disabled><span class="icon"></span></button></div>
+
+      <div class="row-header">Large<br><span style="font-weight:400">with label</span></div>
+      <div class="btn-cell"><button class="btn btn-lg btn-text">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-lg btn-text state-hover">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-lg btn-text state-active">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-lg btn-text state-focus">Botão</button></div>
+      <div class="btn-cell"><button class="btn btn-lg btn-text state-disabled" disabled>Botão</button></div>
+
+      <div class="row-header">icon only</div>
+      <div class="btn-cell"><button class="btn btn-icon-lg btn-text"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-lg btn-text state-hover"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-lg btn-text state-active"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-lg btn-text state-focus"><span class="icon"></span></button></div>
+      <div class="btn-cell"><button class="btn btn-icon-lg btn-text state-disabled" disabled><span class="icon"></span></button></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
