@@ -123,6 +123,19 @@ async function loadSystemName() {
   } catch (e) { /* silencia */ }
 }
 
+/* ── Badge de ID do documento na topbar ── */
+function setTopbarBadge(id) {
+  const badge = document.getElementById('topbar-id-badge');
+  if (!badge) return;
+  if (id) {
+    badge.textContent = id;
+    badge.hidden = false;
+  } else {
+    badge.hidden = true;
+    badge.textContent = '';
+  }
+}
+
 /* ═══════════════════════════════════════════════════════════════
    CARREGAR ÁRVORE DO REPOSITÓRIO
    ═══════════════════════════════════════════════════════════════ */
@@ -457,6 +470,7 @@ function handleHashChange() {
 function showWelcome() {
   state.activeFile = null;
   setActive('');
+  setTopbarBadge('');
   const welcomeEl = document.getElementById('welcome-screen');
   const inner = document.getElementById('content-inner');
   if (inner && welcomeEl) {
@@ -485,6 +499,7 @@ function renderWelcomeStats() {
 function showDirectory(dirPath) {
   state.activeFile = dirPath;
   setActive(dirPath);
+  setTopbarBadge('');
   expandPathInSidebar(dirPath + '/_');
 
   const dirName = dirPath.split('/').pop();
@@ -599,6 +614,12 @@ async function fetchAndRenderMd(filePath, targetEl) {
     targetEl.innerHTML = `<div class="md-content">${html}</div>`;
   } else {
     document.getElementById('content-inner').innerHTML = container;
+  }
+
+  // Exibe ID do documento na topbar (padrão: **ID**: VALOR)
+  if (!targetEl) {
+    const idMatch = text.match(/^\*\*ID\*\*:\s*(.+)/m);
+    setTopbarBadge(idMatch ? idMatch[1].trim() : '');
   }
 
   // Syntax highlighting

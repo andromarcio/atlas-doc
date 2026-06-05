@@ -3,6 +3,29 @@
    Baseado em sakai.css (prototypes/_biblioteca/sakai.css)
    ═══════════════════════════════════════════════════════════════ */
 
+/* ── Badge de ID do documento (exibida na topbar) ──────────────── */
+.topbar-id-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1875rem 0.625rem;
+  border-radius: 99px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  background: var(--highlight-bg);
+  color: var(--primary-color);
+  border: 1px solid var(--p-primary-200);
+  white-space: nowrap;
+  margin-left: 0.5rem;
+  transition: opacity var(--transition-duration);
+}
+
+html.app-dark .topbar-id-badge {
+  border-color: var(--p-primary-700);
+}
+
+
+
 /* ── Tema: sakai.css usa .app-dark/.app-light no <html> ─────── */
 html.app-light {
   color-scheme: light;
