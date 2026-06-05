@@ -4,13 +4,13 @@
    ═══════════════════════════════════════════════════════════════ */
 
 /* ── Configuração — lida do repo.config.js ── */
-const _cfg         = window.REPO_CONFIG || {};
-const REPO_OWNER   = _cfg.owner  || 'andromarcio';
-const REPO_NAME    = _cfg.name   || 'atlas-doc';
-const BRANCH       = _cfg.branch || 'main';
-const RAW_BASE     = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}`;
-const API_BASE     = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`;
-const GITHUB_URL   = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
+const _cfg = window.REPO_CONFIG || {};
+const REPO_OWNER = _cfg.owner || 'andromarcio';
+const REPO_NAME = _cfg.name || 'atlas-doc';
+const BRANCH = _cfg.branch || 'main';
+const RAW_BASE = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}`;
+const API_BASE = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`;
+const GITHUB_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
 
 /* URL base para arquivos estáticos servidos pelo GitHub Pages (ou localhost).
    Usado em iframes — raw.githubusercontent.com bloqueia embed via X-Frame-Options. */
@@ -22,33 +22,33 @@ const PAGES_BASE = (() => {
 })();
 
 /* ── Filtros ── */
-const HIDDEN_DIRS  = new Set(['prompts', '.github', '.git', '.claude', 'node_modules']);
+const HIDDEN_DIRS = new Set(['prompts', '.github', '.git', '.claude', 'node_modules']);
 
 /* ── Ícones por extensão e pasta ── */
 const ICONS = {
-  dir:    '📁',
-  md:     '📄',
-  html:   '🖥️',
-  json:   '📋',
-  yml:    '⚙️',
-  yaml:   '⚙️',
-  js:     '⚡',
-  ts:     '⚡',
-  css:    '🎨',
-  png:    '🖼️',
-  jpg:    '🖼️',
-  svg:    '🎨',
-  pdf:    '📕',
-  txt:    '📝',
-  default:'📄',
+  dir: '📁',
+  md: '📄',
+  html: '🖥️',
+  json: '📋',
+  yml: '⚙️',
+  yaml: '⚙️',
+  js: '⚡',
+  ts: '⚡',
+  css: '🎨',
+  png: '🖼️',
+  jpg: '🖼️',
+  svg: '🎨',
+  pdf: '📕',
+  txt: '📝',
+  default: '📄',
 };
 const DIR_ICONS = {
-  global:     '🌐',
-  modules:    '📦',
+  global: '🌐',
+  modules: '📦',
   prototypes: '🔲',
-  decisions:  '🏛️',
+  decisions: '🏛️',
   changelogs: '📜',
-  repos:      '💾',
+  repos: '💾',
   'data-models': '🗄️',
 };
 
@@ -62,13 +62,13 @@ const TITLE_STRIP_RE = /^(Domínio|Feature Set|Feature|Nível\s*\d+)\s*[:\-–]\
 
 /* ── Estado global ── */
 let state = {
-  tree:       [],           // árvore plana da API
-  treeMap:    {},           // path → nó
-  dirTitles:  {},           // path → título extraído do README.md
+  tree: [],           // árvore plana da API
+  treeMap: {},           // path → nó
+  dirTitles: {},           // path → título extraído do README.md
   activeFile: null,
   sidebarOpen: true,
-  theme:      localStorage.getItem('theme') || 'light',
-  showDev:    localStorage.getItem('showDev') !== 'false',
+  theme: localStorage.getItem('theme') || 'light',
+  showDev: localStorage.getItem('showDev') !== 'false',
 };
 
 /* ═══════════════════════════════════════════════════════════════
@@ -113,7 +113,7 @@ async function loadSystemName() {
     if (!res.ok) return;
     const text = await res.text();
     // Nome do sistema
-    const nameMatch = text.match(/\*\*Nome\*\*:\s*(.+)/);
+    const nameMatch = text.match(/\*\*Sigla\*\*:\s*(.+)/);
     if (nameMatch) {
       const name = nameMatch[1].trim();
       document.getElementById('system-name').textContent = name;
@@ -249,21 +249,21 @@ function createFixedReadmeItem() {
   const row = document.createElement('div');
   row.className = 'tree-row tree-row-pinned';
   row.dataset.path = 'README.md';
-  row.dataset.type  = 'file';
+  row.dataset.type = 'file';
   if (state.activeFile === 'README.md') row.classList.add('active');
 
   const chev = document.createElement('span');
   chev.className = 'tree-chevron leaf';
-  chev.innerHTML  = '▶';
+  chev.innerHTML = '▶';
   row.appendChild(chev);
 
   const icon = document.createElement('span');
-  icon.className   = 'tree-icon';
+  icon.className = 'tree-icon';
   icon.textContent = '🏠';
   row.appendChild(icon);
 
   const label = document.createElement('span');
-  label.className   = 'tree-name';
+  label.className = 'tree-name';
   label.textContent = 'Início';
   row.appendChild(label);
 
@@ -487,13 +487,13 @@ function showWelcome() {
 function renderWelcomeStats() {
   const statsEl = document.getElementById('welcome-stats');
   if (!statsEl) return;
-  const dirs   = state.tree.filter(n => n.type === 'tree').length;
-  const files  = state.tree.filter(n => n.type === 'blob').length;
-  const mds    = state.tree.filter(n => n.path.endsWith('.md')).length;
-  const htmls  = state.tree.filter(n => n.path.endsWith('.html')).length;
+  const dirs = state.tree.filter(n => n.type === 'tree').length;
+  const files = state.tree.filter(n => n.type === 'blob').length;
+  const mds = state.tree.filter(n => n.path.endsWith('.md')).length;
+  const htmls = state.tree.filter(n => n.path.endsWith('.html')).length;
   statsEl.innerHTML = [
-    dirs  ? `<span class="stat-chip">📁 ${dirs} diretórios</span>` : '',
-    mds   ? `<span class="stat-chip">📄 ${mds} documentos</span>` : '',
+    dirs ? `<span class="stat-chip">📁 ${dirs} diretórios</span>` : '',
+    mds ? `<span class="stat-chip">📄 ${mds} documentos</span>` : '',
     htmls ? `<span class="stat-chip">🔲 ${htmls} protótipos</span>` : '',
   ].join('');
 }
@@ -624,7 +624,7 @@ async function fetchAndRenderMd(filePath, targetEl) {
   // Syntax highlighting
   document.querySelectorAll('.md-content pre code').forEach(el => {
     addCodeLangLabel(el);
-    try { hljs.highlightElement(el); } catch(e) {}
+    try { hljs.highlightElement(el); } catch (e) { }
   });
 
   // Tornar links internos (.md) navegáveis
@@ -712,7 +712,7 @@ async function showRawFile(filePath) {
     <pre style="background:var(--surface-ground);border:1px solid var(--surface-border);border-radius:var(--border-radius);padding:1rem;overflow:auto;max-height:80vh"><code class="language-${ext}">${escapeHtml(text)}</code></pre>
   `;
   document.querySelectorAll('pre code').forEach(el => {
-    try { hljs.highlightElement(el); } catch(e) {}
+    try { hljs.highlightElement(el); } catch (e) { }
   });
 }
 
@@ -740,10 +740,10 @@ function buildBreadcrumb(path, isDir) {
    PROTÓTIPO MODAL
    ═══════════════════════════════════════════════════════════════ */
 function openProto(filePath, title) {
-  const modal    = document.getElementById('proto-modal');
+  const modal = document.getElementById('proto-modal');
   const backdrop = document.getElementById('proto-backdrop');
-  const frame    = document.getElementById('proto-frame');
-  const titleEl  = document.getElementById('proto-modal-title');
+  const frame = document.getElementById('proto-frame');
+  const titleEl = document.getElementById('proto-modal-title');
   const openLink = document.getElementById('proto-open-link');
 
   frame.src = `${PAGES_BASE}/${filePath}`;
@@ -772,9 +772,9 @@ function applyTheme(theme) {
   html.classList.toggle('app-light', theme !== 'dark');
   document.getElementById('theme-btn').textContent = theme === 'dark' ? '☀️' : '🌙';
   const lightSheet = document.getElementById('hljs-theme-light');
-  const darkSheet  = document.getElementById('hljs-theme-dark');
+  const darkSheet = document.getElementById('hljs-theme-dark');
   if (lightSheet) lightSheet.disabled = theme === 'dark';
-  if (darkSheet)  darkSheet.disabled  = theme !== 'dark';
+  if (darkSheet) darkSheet.disabled = theme !== 'dark';
 }
 function toggleTheme() {
   state.theme = state.theme === 'dark' ? 'light' : 'dark';
@@ -842,7 +842,7 @@ function runSearch(q) {
 
   results.innerHTML = matches.map(n => {
     const name = n.path.split('/').pop();
-    const dir  = n.path.split('/').slice(0, -1).join('/');
+    const dir = n.path.split('/').slice(0, -1).join('/');
     const icon = getIcon(n);
     const qLow = q.toLowerCase();
     const nameLow = name.toLowerCase();
@@ -876,7 +876,7 @@ window.closeSearch = closeSearch;
    UTILIDADES
    ═══════════════════════════════════════════════════════════════ */
 function escapeHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 function resolvePath(basePath, relative) {
   const base = basePath.split('/').slice(0, -1);
