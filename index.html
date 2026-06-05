@@ -163,7 +163,7 @@
     var masterUrl = 'https://raw.githubusercontent.com/' + owner + '/' + repo + '/' + branch + '/global/MASTER.md';
     fetch(masterUrl).then(function(r){ return r.ok ? r.text() : null; }).then(function(text){
       if (!text) return;
-      var m = text.match(/\*\*Nome\*\*:\s*(.+)/);
+      var m = text.match(/\*\*Sigla\*\*:\s*(.+)/);
       if (m && m[1].trim() && m[1].trim() !== '[Nome do sistema]') {
         var name = m[1].trim();
         document.getElementById('lp-logo-text').textContent = name;
