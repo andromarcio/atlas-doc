@@ -112,13 +112,19 @@ async function loadSystemName() {
     const res = await fetch(`${RAW_BASE}/global/MASTER.md`);
     if (!res.ok) return;
     const text = await res.text();
-    // Procura linha "- **Nome**: [valor]"
-    const match = text.match(/\*\*Nome\*\*:\s*(.+)/);
-    if (match) {
-      const name = match[1].trim();
+    // Nome do sistema
+    const nameMatch = text.match(/\*\*Nome\*\*:\s*(.+)/);
+    if (nameMatch) {
+      const name = nameMatch[1].trim();
       document.getElementById('system-name').textContent = name;
       document.getElementById('welcome-title').textContent = name;
       document.title = `${name} — Docs`;
+    }
+    // Sigla → badge fixa na topbar
+    const siglaMatch = text.match(/\*\*Sigla\*\*:\s*(.+)/);
+    if (siglaMatch) {
+      const sigla = siglaMatch[1].trim();
+      if (sigla && !sigla.startsWith('[')) setTopbarBadge(sigla);
     }
   } catch (e) { /* silencia */ }
 }
@@ -470,7 +476,6 @@ function handleHashChange() {
 function showWelcome() {
   state.activeFile = null;
   setActive('');
-  setTopbarBadge('');
   const welcomeEl = document.getElementById('welcome-screen');
   const inner = document.getElementById('content-inner');
   if (inner && welcomeEl) {
@@ -499,7 +504,6 @@ function renderWelcomeStats() {
 function showDirectory(dirPath) {
   state.activeFile = dirPath;
   setActive(dirPath);
-  setTopbarBadge('');
   expandPathInSidebar(dirPath + '/_');
 
   const dirName = dirPath.split('/').pop();
@@ -616,11 +620,6 @@ async function fetchAndRenderMd(filePath, targetEl) {
     document.getElementById('content-inner').innerHTML = container;
   }
 
-  // Exibe ID do documento na topbar (padrão: **ID**: VALOR)
-  if (!targetEl) {
-    const idMatch = text.match(/^\*\*ID\*\*:\s*(.+)/m);
-    setTopbarBadge(idMatch ? idMatch[1].trim() : '');
-  }
 
   // Syntax highlighting
   document.querySelectorAll('.md-content pre code').forEach(el => {
