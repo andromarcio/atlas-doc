@@ -6,24 +6,26 @@
 
 ## Identificação do sistema
 
-- **Nome**: [Nome do sistema]
-- **Descrição**: [Uma frase descrevendo o propósito do sistema]
-- **Versão atual**: [ex: 1.0.0]
-- **Repositório de docs**: [URL]
+- **Sigla**: SIGES
+- **Nome**: Sistema Integrado de Gestão de Engenharia de Software
+- **Nome Produto**: Atlas
+- **Descrição**: Plataforma que centraliza a gestão do ciclo de vida de software para quem coordena o processo, e não para quem escreve o código. Em um único lugar, gerentes de projeto, analistas de requisitos, equipes de teste e responsáveis pela GCM acompanham requisitos, métricas, testes e versões com rastreabilidade ponta a ponta — do requisito levantado até a versão entregue.
+- **Versão atual**: Beta
+- **Repositório de docs**: https://github.com/andromarcio/atlas-doc
 
 ---
 
 ## Stack técnica
 
-- **Frontend**: [ex: Next.js 14, TypeScript, Tailwind CSS]
-- **Backend**: [ex: Node.js, Express / Next.js API Routes]
-- **Banco de dados**: [ex: PostgreSQL com Prisma ORM]
-- **Autenticação**: [ex: NextAuth.js com Google Provider]
-- **Fila / Jobs**: [ex: BullMQ + Redis]
-- **Storage**: [ex: AWS S3 / Cloudflare R2]
-- **E-mail**: [ex: SendGrid]
-- **SMS**: [ex: Twilio]
-- **Mensageria**: [ex: Evolution API — WhatsApp]
+- **Frontend**: Angular 21, TypeScript, Tailwind CSS
+- **Backend**: Java Quarkus
+- **Banco de dados**: PostgreSQL com Prisma ORM
+- **Autenticação**: NextAuth.js com Google Provider
+- **Fila / Jobs**: Não se aplica
+- **Storage**: A definir
+- **E-mail**: Não se aplica
+- **SMS**: Não se aplica
+- **Mensageria**: Não se aplica
 
 ---
 
@@ -33,15 +35,14 @@
 |---|---|
 | [nome-backend] | [ex: API REST, regras de negócio] |
 | [nome-frontend] | [ex: Interface web] |
-| [nome-workers] | [ex: Jobs assíncronos e filas] |
-| [nome-docs] | Documentação e especificações (este repo) |
+| atlas-doc | Documentação e especificações (este repo) |
 
 ---
 
 ## Convenções de código
 
 ### Nomenclatura
-- Componentes React: PascalCase, um arquivo por componente
+- Componentes Angular: PascalCase, um arquivo por componente
 - Funções e variáveis: camelCase
 - Constantes: UPPER_SNAKE_CASE
 - Rotas de API: kebab-case (ex: `/smart-lists`)
@@ -145,13 +146,12 @@ Os N3 usam apenas Label PO — nunca duplicam as camadas técnicas.
 
 ## Regras globais de negócio
 
-1. **Multitenancy**: toda query filtra obrigatoriamente por `organization_id`
-2. **Soft delete universal**: registros nunca são removidos fisicamente
-3. **IDs em URLs**: sempre UUID — nunca IDs sequenciais
-4. **Paginação**: sempre cursor-based; padrão 20 itens; teto 100
-5. **Validação**: Zod em frontend e backend; nunca confiar apenas no client
-6. **Auditoria**: ações críticas sempre registradas em `AuditLog`
-7. **Eventos internos**: módulos comunicam-se via eventos, nunca chamadas diretas
+1. **Soft delete universal**: registros nunca são removidos fisicamente
+2. **IDs em URLs**: sempre UUID — nunca IDs sequenciais
+3. **Paginação**: sempre cursor-based; padrão 20 itens; teto 100
+4. **Validação**: Zod em frontend e backend; nunca confiar apenas no client
+5. **Auditoria**: ações críticas sempre registradas em `AuditLog`
+6. **Eventos internos**: módulos comunicam-se via eventos, nunca chamadas diretas
 
 ---
 
