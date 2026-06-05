@@ -38,6 +38,7 @@
 
     .lp-card {
       display: flex; flex-direction: column; gap: .5rem;
+      height: 100%;
       background: var(--surface-card); border: 1px solid var(--surface-border);
       border-radius: var(--border-radius-lg); padding: 1.5rem;
       box-shadow: var(--shadow-card); text-decoration: none; color: inherit;
@@ -50,8 +51,8 @@
       background: var(--highlight-bg); color: var(--highlight-color); margin-bottom: .25rem;
     }
     .lp-card-icon svg { width: 1.5rem; height: 1.5rem; }
-    .lp-card h3 { margin: 0; font-size: 1.05rem; }
-    .lp-card p { margin: 0; font-size: .9rem; color: var(--text-color-secondary); }
+    .lp-card h3 { margin: 0 !important; font-size: 1.05rem; }
+    .lp-card p { margin: 0 !important; font-size: .9rem; color: var(--text-color-secondary); }
     .lp-card .lp-card-link {
       margin-top: auto; padding-top: .75rem; font-size: .85rem; font-weight: 600;
       color: var(--primary-color); display: inline-flex; align-items: center; gap: .25rem;
