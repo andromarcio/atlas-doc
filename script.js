@@ -3,10 +3,11 @@
    Navegação de repositório via GitHub API com renderização Markdown
    ═══════════════════════════════════════════════════════════════ */
 
-/* ── Configuração ── */
-const REPO_OWNER   = 'andromarcio';
-const REPO_NAME    = 'doc-template';
-const BRANCH       = 'main';
+/* ── Configuração — lida do repo.config.js ── */
+const _cfg         = window.REPO_CONFIG || {};
+const REPO_OWNER   = _cfg.owner  || 'andromarcio';
+const REPO_NAME    = _cfg.name   || 'atlas-doc';
+const BRANCH       = _cfg.branch || 'main';
 const RAW_BASE     = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}`;
 const API_BASE     = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`;
 const GITHUB_URL   = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
