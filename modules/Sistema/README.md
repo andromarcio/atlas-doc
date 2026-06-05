@@ -1,7 +1,5 @@
 # Sistema
 
----
-
 **Nível 1 — Domínio**
 **ID**: SIS
 
