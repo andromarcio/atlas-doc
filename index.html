@@ -33,12 +33,12 @@
       text-transform: uppercase; color: var(--text-muted-color);
       margin: 3rem 0 1rem;
     }
-    .lp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    .lp-grid { display: grid; grid-template-columns: repeat(3, 1fr); align-items: stretch; gap: 1.25rem; }
     @media (max-width: 820px) { .lp-grid { grid-template-columns: 1fr; } }
 
     .lp-card {
       display: flex; flex-direction: column; gap: .5rem;
-      height: 100%;
+      align-self: stretch;
       background: var(--surface-card); border: 1px solid var(--surface-border);
       border-radius: var(--border-radius-lg); padding: 1.5rem;
       box-shadow: var(--shadow-card); text-decoration: none; color: inherit;
