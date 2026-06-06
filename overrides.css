@@ -1,0 +1,91 @@
+/* =============================
+   Overrides for premium visual design
+   - Import Inter font
+   - Gradient top bar
+   - Glass‑morphism sidebar
+   - Content card styling
+   - Theme toggle button
+   - Minimal Mermaid styling
+   ============================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+/* Base typography */
+html, body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #0a0e23; /* dark navy */
+  color: #e0e0e0;
+  margin: 0;
+}
+
+/* ---- Top bar (gradient) ---- */
+.layout-topbar {
+  background: linear-gradient(90deg, #1e1e3f, #0a0e23);
+  backdrop-filter: blur(8px);
+  color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+}
+.layout-topbar button,
+.layout-topbar a {
+  transition: transform .2s ease, color .2s ease;
+}
+.layout-topbar button:hover,
+.layout-topbar a:hover {
+  transform: scale(1.07);
+  color: #00bfa5;
+}
+
+/* ---- Sidebar – glassmorphism ---- */
+.layout-sidebar {
+  background: rgba(10, 14, 35, 0.6);
+  backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  width: 260px;
+  padding: 1rem;
+  border-radius: 0 0 0 12px;
+}
+.layout-sidebar .layout-menu a {
+  color: #e0e0e0;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  transition: background .2s ease, color .2s ease;
+}
+.layout-sidebar .layout-menu a:hover,
+.layout-sidebar .layout-menu a.active {
+  background: rgba(0, 191, 165, 0.15);
+  color: #00bfa5;
+}
+
+/* ---- Content area – card ---- */
+.layout-main {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+.layout-main > .content-card {
+  background: #ffffff;
+  color: #212529;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* ---- Theme toggle button ---- */
+#theme-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* ---- Minimal Mermaid styling ---- */
+.mermaid {
+  font-family: inherit;
+}
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
