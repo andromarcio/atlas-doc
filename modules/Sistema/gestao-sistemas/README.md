@@ -1,20 +1,18 @@
-📄 `modules/SIS/SIS-001/README.md`
-
----
+# Feature Set: Gestão de Sistemas
 
 **Nível 2 — Feature Set**
 **ID**: SIS-001
-
-# Gestão de Sistemas
 
 ---
 
 ## Responsabilidade
 
-**O que este Feature Set faz**
+### O que este Feature Set faz
+
 Permite ao usuário cadastrar novos sistemas, consultar os sistemas existentes, visualizar seus dados completos, editar informações já registradas, excluir registros e ativar ou inativar sistemas conforme necessário.
 
-**O que este Feature Set NÃO faz**
+### O que este Feature Set NÃO faz
+
 Não gerencia requisitos, contagens de pontos de função, nem qualquer outra disciplina derivada do sistema. Não realiza vinculações com outros domínios além do cadastro em si.
 
 ---
