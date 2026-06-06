@@ -1,91 +1,251 @@
-/* =============================
-   Overrides for premium visual design
-   - Import Inter font
-   - Gradient top bar
-   - Glass‑morphism sidebar
-   - Content card styling
-   - Theme toggle button
-   - Minimal Mermaid styling
-   ============================= */
+/* =====================================================================
+   overrides.css — Visual premium por cima do styles.css original
+   Carregado APÓS styles.css e sakai.css no viewer.html.
+   Não remove nenhuma funcionalidade; apenas re-estiliza visualmente.
+   ===================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+/* ── Fonte Inter ─────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
-/* Base typography */
 html, body {
-  font-family: 'Inter', system-ui, sans-serif;
-  background-color: #0a0e23; /* dark navy */
-  color: #e0e0e0;
-  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* ---- Top bar (gradient) ---- */
+/* ── Top bar — gradiente escuro ──────────────────────────────────── */
 .layout-topbar {
-  background: linear-gradient(90deg, #1e1e3f, #0a0e23);
-  backdrop-filter: blur(8px);
-  color: #e0e0e0;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.5rem 1rem;
-}
-.layout-topbar button,
-.layout-topbar a {
-  transition: transform .2s ease, color .2s ease;
-}
-.layout-topbar button:hover,
-.layout-topbar a:hover {
-  transform: scale(1.07);
-  color: #00bfa5;
+  background: linear-gradient(90deg, #111827 0%, #0d1b2a 100%);
+  border-bottom: 1px solid rgba(0, 191, 165, 0.18);
+  color: #e2e8f0;
 }
 
-/* ---- Sidebar – glassmorphism ---- */
-.layout-sidebar {
-  background: rgba(10, 14, 35, 0.6);
-  backdrop-filter: blur(12px);
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
-  width: 260px;
-  padding: 1rem;
-  border-radius: 0 0 0 12px;
-}
-.layout-sidebar .layout-menu a {
-  color: #e0e0e0;
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  transition: background .2s ease, color .2s ease;
-}
-.layout-sidebar .layout-menu a:hover,
-.layout-sidebar .layout-menu a.active {
-  background: rgba(0, 191, 165, 0.15);
-  color: #00bfa5;
+/* Logo e texto */
+.layout-topbar-logo {
+  color: #e2e8f0 !important;
+  font-weight: 600;
 }
 
-/* ---- Content area – card ---- */
-.layout-main {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-}
-.layout-main > .content-card {
-  background: #ffffff;
-  color: #212529;
-  border-radius: 8px;
-  padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-/* ---- Theme toggle button ---- */
-#theme-btn {
-  background: none;
+/* Botões da topbar */
+.layout-topbar-action {
+  color: #94a3b8;
+  background: transparent;
   border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
+  border-radius: 50%;
+  transition: color 0.18s ease, background 0.18s ease, transform 0.18s ease;
 }
 
-/* ---- Minimal Mermaid styling ---- */
-.mermaid {
-  font-family: inherit;
+.layout-topbar-action:hover {
+  color: #00bfa5;
+  background: rgba(0, 191, 165, 0.1);
+  transform: scale(1.08);
 }
+
+/* Input de busca */
+.docs-search-input {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+}
+
+.docs-search-input::placeholder {
+  color: #64748b;
+}
+
+.docs-search-input:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #00bfa5;
+}
+
+/* ── Sidebar — glassmorphism ─────────────────────────────────────── */
+.layout-sidebar {
+  background: rgba(10, 14, 35, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-right: 1px solid rgba(0, 191, 165, 0.12);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Seção título do menu */
+.layout-menu-section-title {
+  color: #64748b;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── Tree items ──────────────────────────────────────────────────── */
+.tree-row {
+  color: #94a3b8;
+  border-radius: 6px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.tree-row:hover {
+  background: rgba(0, 191, 165, 0.1);
+  color: #e2e8f0;
+}
+
+.tree-row.active {
+  background: rgba(0, 191, 165, 0.18);
+  color: #00bfa5;
+  font-weight: 600;
+}
+
+.tree-row-pinned {
+  color: #cbd5e1;
+}
+
+.tree-name-dir {
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+.tree-chevron {
+  color: #475569;
+}
+
+.tree-chevron.open {
+  color: #00bfa5;
+}
+
+/* ── Fundo geral da página ───────────────────────────────────────── */
+body {
+  background-color: #0a0e1a;
+  color: #e2e8f0;
+}
+
+/* ── Área de conteúdo principal ──────────────────────────────────── */
+.layout-main-container {
+  background-color: #0a0e1a;
+}
+
+/* ── Card de conteúdo markdown ───────────────────────────────────── */
+.content-card {
+  background: #ffffff;
+  color: #1e293b;
+  border-radius: 10px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18), 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+}
+
+/* ── Tela de boas-vindas ─────────────────────────────────────────── */
+.welcome {
+  color: #e2e8f0;
+}
+
+.welcome-title {
+  color: #f1f5f9;
+}
+
+.welcome-subtitle {
+  color: #64748b;
+}
+
+.welcome-stats .stat-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  color: #94a3b8;
+}
+
+.welcome-stats .stat-count {
+  color: #00bfa5;
+}
+
+/* ── Skeleton loading ────────────────────────────────────────────── */
+.skeleton-line {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.skeleton-line::after {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+}
+
+/* ── Sidebar overlay (mobile) ────────────────────────────────────── */
+.sidebar-overlay {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+}
+
+/* ── Diagramas Mermaid ───────────────────────────────────────────── */
+.mermaid {
+  font-family: 'Inter', sans-serif;
+}
+
 .mermaid svg {
   max-width: 100%;
   height: auto;
+}
+
+/* ── Scrollbar personalizada ─────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 191, 165, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 191, 165, 0.6);
+}
+
+/* ── Botão de toggle de tema ─────────────────────────────────────── */
+#theme-btn {
+  font-size: 1.1rem;
+}
+
+/* ── Modo claro: manter card de conteúdo legível ─────────────────── */
+.app-light .content-card {
+  background: #ffffff;
+  color: #1e293b;
+}
+
+/* ── Modo escuro: card mais sutil ────────────────────────────────── */
+.app-dark .content-card {
+  background: #1e293b;
+  color: #e2e8f0;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Highlight.js dentro do card ────────────────────────────────── */
+.app-dark .md-content pre {
+  background: #0f172a;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Listagem de diretórios ─────────────────────────────────────── */
+.dir-listing-header {
+  color: #94a3b8;
+}
+
+.dir-listing-card {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.dir-listing-card:hover {
+  background: rgba(0, 191, 165, 0.06);
+  border-color: rgba(0, 191, 165, 0.2);
+}
+
+.dir-listing-name {
+  color: #e2e8f0;
+}
+
+/* ── Modal de protótipo ─────────────────────────────────────────── */
+.docs-proto-modal {
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.docs-proto-modal-header {
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
 }
