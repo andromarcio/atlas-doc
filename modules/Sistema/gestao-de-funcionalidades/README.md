@@ -32,43 +32,27 @@ Não realiza gestão de requisitos, contagens de pontos de função ou qualquer 
 
 ## Fluxo Principal
 
-```
-1. Usuário acessa "Funcionalidades" no menu principal
-        │
-        ▼
-2. Sistema exibe a tela "Pesquisar Funcionalidade"
-   com os últimos 30 registros cadastrados
-        │
-        ├─── [Usuário aplica filtros] ──► Sistema atualiza a lista
-        │
-        ├─── [Incluir] ──────────────────────────────────────────────┐
-        │                                                             ▼
-        │                                          3a. Tela "Incluir / Editar Funcionalidade"
-        │                                              (formulário em branco)
-        │                                              Usuário preenche os dados e confirma
-        │                                              Sistema valida e salva o registro
-        │                                              Retorna à tela de pesquisa (com feedback)
-        │
-        ├─── [Visualizar registro] ──► Tela "Visualizar Funcionalidade" (modo leitura)
-        │                              Usuário consulta os dados
-        │                              Retorna à tela de pesquisa
-        │
-        ├─── [Editar registro] ──────────────────────────────────────┐
-        │                                                             ▼
-        │                                          3b. Tela "Incluir / Editar Funcionalidade"
-        │                                              (formulário preenchido com dados atuais)
-        │                                              Usuário altera os dados e confirma
-        │                                              Sistema valida e salva as alterações
-        │                                              Retorna à tela de pesquisa (com feedback)
-        │
-        ├─── [Excluir registro] ──► Sistema solicita confirmação
-        │                           Usuário confirma
-        │                           Sistema realiza exclusão lógica
-        │                           Retorna à tela de pesquisa (com feedback)
-        │
-        └─── [Ativar / Inativar registro] ──► Sistema alterna o status do registro
-                                               Tela de pesquisa é atualizada com novo status
-                                               (sem navegação para outra tela)
+```mermaid
+flowchart TD
+    A([Usuário acessa &quot;Funcionalidades&quot; no menu]) --> B[Tela &quot;Pesquisar Funcionalidade&quot;<br/>exibe últimos 30 registros]
+
+    B -->|Aplica filtros| F[Sistema atualiza a lista]
+
+    B -->|Incluir| I1[Tela &quot;Incluir / Editar&quot;<br/>formulário em branco]
+    I1 --> I2[Usuário preenche e confirma]
+    I2 --> I3[Sistema valida e salva o registro]
+
+    B -->|Visualizar registro| V1[Tela &quot;Visualizar&quot;<br/>modo leitura]
+    V1 --> V2[Usuário consulta os dados]
+
+    B -->|Editar registro| E1[Tela &quot;Incluir / Editar&quot;<br/>dados atuais preenchidos]
+    E1 --> E2[Usuário altera e confirma]
+    E2 --> E3[Sistema valida e salva as alterações]
+
+    B -->|Excluir registro| X1{Confirma<br/>exclusão?}
+    X1 -->|Sim| X2[Sistema realiza exclusão lógica]
+
+    B -->|Ativar / Inativar| S1[Sistema alterna o status do registro]
 ```
 
 ---

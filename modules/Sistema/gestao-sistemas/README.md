@@ -34,18 +34,28 @@ Não gerencia requisitos, contagens de pontos de função, nem qualquer outra di
 
 ## Fluxo Principal
 
-1. O usuário acessa a opção **Sistema** no menu principal.
-2. O sistema exibe a tela de **Pesquisar Sistema** com os últimos 30 registros cadastrados.
-3. O usuário pode, opcionalmente, informar filtros e acionar a busca para refinar os resultados.
-4. A partir de cada registro listado, o usuário escolhe uma das ações disponíveis:
-   - **Visualizar** — abre a tela de visualização com os dados completos em modo leitura.
-   - **Editar** — abre o formulário preenchido com os dados atuais para alteração.
-   - **Excluir** — solicita confirmação e realiza a exclusão lógica do registro.
-   - **Ativar / Inativar** — alterna o status do sistema diretamente da listagem.
-5. Para criar um novo registro, o usuário aciona o botão **Incluir** na tela de pesquisa.
-6. O sistema exibe o formulário em branco (**Incluir / Editar Sistema**).
-7. O usuário preenche os dados e confirma.
-8. O sistema valida as informações, salva o registro e retorna à tela de pesquisa.
+```mermaid
+flowchart TD
+    A([Usuário acessa &quot;Sistema&quot; no menu]) --> B[Tela &quot;Pesquisar Sistema&quot;<br/>exibe últimos 30 registros]
+
+    B -->|Aplica filtros| F[Sistema refina os resultados]
+
+    B -->|Incluir| I1[Formulário &quot;Incluir / Editar&quot;<br/>em branco]
+    I1 --> I2[Usuário preenche e confirma]
+    I2 --> I3[Sistema valida e salva o registro]
+
+    B -->|Visualizar registro| V1[Tela &quot;Visualizar&quot;<br/>modo leitura]
+    V1 --> V2[Usuário consulta os dados]
+
+    B -->|Editar registro| E1[Formulário &quot;Incluir / Editar&quot;<br/>dados atuais preenchidos]
+    E1 --> E2[Usuário altera e confirma]
+    E2 --> E3[Sistema valida e salva as alterações]
+
+    B -->|Excluir registro| X1{Confirma<br/>exclusão?}
+    X1 -->|Sim| X2[Sistema realiza exclusão lógica]
+
+    B -->|Ativar / Inativar| S1[Sistema alterna o status do registro]
+```
 
 ---
 
