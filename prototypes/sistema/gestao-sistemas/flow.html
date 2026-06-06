@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protótipo: Gestão de Sistemas — Sistema</title>
+  <link rel="stylesheet" href="../../_biblioteca/sakai.css">
+  <style>
+    /* ── Reset e base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lato', system-ui, 'Segoe UI', sans-serif;
+      font-size: 14px;
+      line-height: 1.2;
+      background: #f1f5f9;
+      color: #334155;
+    }
+
+    /* ── Prototype badge ── */
+    .prototype-badge {
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #f59e0b;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.35rem 1rem;
+      border-radius: 999px;
+      z-index: 9999;
+      letter-spacing: 0.04em;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      pointer-events: none;
+    }
+
+    /* ── Topbar ── */
+    .layout-topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 4rem;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .layout-topbar-logo {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #3b82f6;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .layout-topbar-logo span { color: #334155; }
+    .layout-topbar-logo strong { color: #3b82f6; }
+
+    .layout-topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .p-avatar {
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 50%;
+      background: #3b82f6;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .topbar-icon-btn {
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      font-size: 1.1rem;
+      transition: background 0.2s;
+    }
+    .topbar-icon-btn:hover { background: #f1f5f9; }
+
+    /* ── Sidebar ── */
+    .layout-sidebar {
+      position: fixed;
+      top: 6rem;
+      left: 2rem;
+      width: 20rem;
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      overflow-y: auto;
+      max-height: calc(100vh - 7rem);
+      z-index: 100;
+    }
+
+    .layout-menu {
+      list-style: none;
+      padding: 0.75rem 0;
+    }
+
+    .layout-menuitem-root-text {
+      display: block;
+      padding: 0.65rem 1.25rem 0.35rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .layout-menu ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .layout-menu a {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 1.25rem;
+      color: #334155;
+      text-decoration: none;
+      border-radius: 0;
+      font-size: 0.9rem;
+      transition: background 0.15s, color 0.15s;
+      cursor: pointer;
+    }
+
+    .layout-menu a:hover {
+      background: #f1f5f9;
+      color: #3b82f6;
+    }
+
+    .layout-menu a.active-route {
+      background: #eff6ff;
+      color: #3b82f6;
+      font-weight: 600;
+      border-left: 3px solid #3b82f6;
+    }
+
+    .menu-icon {
+      font-style: normal;
+      font-size: 1rem;
+      width: 1.2rem;
+      text-align: center;
+    }
+
+    /* ── Conteúdo principal ── */
+    .layout-main-container {
+      margin-left: 24rem;
+      padding: 6rem 2rem 4rem 2rem;
+      min-height: 100vh;
+    }
+
+    .layout-main {
+      max-width: 1200px;
+    }
+
+    /* ── Screens ── */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ── Breadcrumb ── */
+    .p-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      color: #64748b;
+      margin-bottom: 1.25rem;
+    }
+
+    .p-breadcrumb a {
+      color: #3b82f6;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .p-breadcrumb a:hover { text-decoration: underline; }
+    .p-breadcrumb-sep { color: #94a3b8; font-size: 0.9rem; }
+    .p-breadcrumb-current { color: #334155; font-weight: 500; }
+
+    /* ── Card ── */
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+
+    /* ── Page header ── */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .page-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.2;
+    }
+
+    .page-subtitle {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 0.2rem;
+    }
+
+    /* ── Filter area ── */
+    .filter-area {
+      display: flex;
+      align-items: flex-end;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .p-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .p-field label {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #475569;
+    }
+
+    .p-inputtext {
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+      font-family: inherit;
+      color: #334155;
+      background: #ffffff;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+
+    .p-inputtext:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 1px #3b82f6;
+    }
+
+    .p-inputtext::placeholder { color: #94a3b8; }
+
+    /* ── Buttons ── */
+    .p-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1.1rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      line-height: 1.2;
+    }
+
+    .p-button-primary {
+      background: #3b82f6;
+      color: #fff;
+      border-color: #3b82f6;
+    }
+    .p-button-primary:hover {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+
+    .p-button-secondary {
+      background: #fff;
+      color: #475569;
+      border-color: #e2e8f0;
+    }
+    .p-button-secondary:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    .p-button-danger {
+      background: #ef4444;
+      color: #fff;
+      border-color: #ef4444;
+    }
+    .p-button-danger:hover {
+      background: #dc2626;
+      border-color: #dc2626;
+    }
+
+    .p-button-text {
+      background: transparent;
+      color: #475569;
+      border-color: transparent;
+    }
+    .p-button-text:hover {
+      background: #f1f5f9;
+    }
+
+    .p-button-sm {
+      padding: 0.35rem 0.7rem;
+      font-size: 0.8rem;
+    }
+
+    .p-button-icon-only {
+      padding: 0.45rem;
+      border-radius: 6px;
+    }
+
+    /* ── Table ── */
+    .p-datatable {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    .p-datatable th {
+      background: #f8fafc;
+      color: #475569;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 2px solid #e2e8f0;
+      white-space: nowrap;
+    }
+
+    .p-datatable td {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+      color: #334155;
+      vertical-align: middle;
+    }
+
+    .p-datatable tr:hover td {
+      background: #f8fafc;
+    }
+
+    .p-datatable tr:last-child td {
+      border-bottom: none;
+    }
+
+    .p-column-actions {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .p-column-actions td {
+      text-align: right;
+    }
+
+    /* ── Tags ── */
+    .p-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .p-tag-success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .p-tag-danger {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .p-tag-secondary {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    /* ── Paginator ── */
+    .p-paginator {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.35rem;
+      padding: 1rem 0 0;
+      border-top: 1px solid #f1f5f9;
+      margin-top: 0.5rem;
+    }
+
+    .p-paginator-info {
+      color: #64748b;
+      font-size: 0.8rem;
+      margin-right: auto;
+    }
+
+    .p-paginator-btn {
+      min-width: 2rem;
+      height: 2rem;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      background: #fff;
+      color: #334155;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+
+    .p-paginator-btn:hover { background: #f1f5f9; }
+    .p-paginator-btn.active {
+      background: #3b82f6;
+      color: #fff;
+      border-color: #3b82f6;
+      font-weight: 700;
+    }
+
+    .p-paginator-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* ── Skeleton ── */
+    .p-skeleton {
+      background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 6px;
+      height: 1rem;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* ── Empty state ── */
+    .p-empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+      text-align: center;
+      gap: 0.75rem;
+    }
+
+    .p-empty-state-icon {
+      font-size: 3rem;
+      color: #cbd5e1;
+      margin-bottom: 0.5rem;
+    }
+
+    .p-empty-state-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .p-empty-state-desc {
+      font-size: 0.85rem;
+      color: #64748b;
+      max-width: 28rem;
+    }
+
+    /* ── Error state ── */
+    .p-error-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+      text-align: center;
+      gap: 0.75rem;
+    }
+
+    .p-error-state-icon {
+      font-size: 2.5rem;
+      color: #ef4444;
+    }
+
+    /* ── Toast ── */
+    .p-toast {
+      position: fixed;
+      top: 5rem;
+      right: 1.5rem;
+      z-index: 9000;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-width: 20rem;
+      max-width: 26rem;
+    }
+
+    .p-toast-item {
+      background: #fff;
+      border-radius: 8px;
+      border-left: 4px solid;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      animation: toastIn 0.25s ease;
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(2rem); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .p-toast-item.success { border-color: #22c55e; }
+    .p-toast-item.error { border-color: #ef4444; }
+    .p-toast-item.warn { border-color: #f59e0b; }
+    .p-toast-item.info { border-color: #3b82f6; }
+
+    .toast-icon {
+      font-size: 1.1rem;
+      margin-top: 0.1rem;
+    }
+    .p-toast-item.success .toast-icon { color: #22c55e; }
+    .p-toast-item.error .toast-icon { color: #ef4444; }
+    .p-toast-item.warn .toast-icon { color: #f59e0b; }
+    .p-toast-item.info .toast-icon { color: #3b82f6; }
+
+    .toast-body { flex: 1; }
+
+    .toast-summary {
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: #1e293b;
+    }
+
+    .toast-detail {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 0.15rem;
+    }
+
+    .toast-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0;
+      line-height: 1;
+    }
+
+    /* ── Modal ── */
+    .p-dialog-mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 5000;
+    }
+
+    .p-dialog {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 32rem;
+      overflow: hidden;
+    }
+
+    .p-dialog-lg {
+      max-width: 54rem;
+    }
+
+    .p-dialog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .p-dialog-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .p-dialog-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #64748b;
+      font-size: 1.1rem;
+      padding: 0.25rem;
+      border-radius: 4px;
+      transition: background 0.15s;
+      line-height: 1;
+    }
+
+    .p-dialog-close:hover { background: #f1f5f9; }
+
+    .p-dialog-content {
+      padding: 1.5rem;
+    }
+
+    .p-dialog-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    /* ── Message (inline) ── */
+    .p-message {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      padding: 0.85rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .p-message-warn {
+      background: #fffbeb;
+      border: 1px solid #fcd34d;
+      color: #92400e;
+    }
+
+    .p-message-info {
+      background: #eff6ff;
+      border: 1px solid #93c5fd;
+      color: #1e40af;
+    }
+
+    /* ── Form layout ── */
+    .form-row {
+      display: flex;
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .form-col { flex: 1; min-width: 12rem; }
+    .form-col-2 { flex: 2; min-width: 16rem; }
+    .form-col-full { flex: 1 1 100%; }
+
+    .form-section-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .p-field { display: flex; flex-direction: column; gap: 0.35rem; }
+    .p-field label { font-size: 0.82rem; font-weight: 500; color: #475569; }
+
+    .required-star { color: #ef4444; margin-left: 0.15rem; }
+    .optional-label { color: #94a3b8; font-weight: 400; font-size: 0.78rem; margin-left: 0.2rem; }
+
+    .p-help {
+      font-size: 0.78rem;
+      color: #64748b;
+    }
+
+    .p-error {
+      font-size: 0.78rem;
+      color: #ef4444;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .p-inputtext.p-invalid {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 1px #ef4444;
+    }
+
+    .p-textarea {
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+      font-family: inherit;
+      color: #334155;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: vertical;
+      width: 100%;
+      min-height: 5rem;
+    }
+    .p-textarea:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 1px #3b82f6;
+    }
+
+    /* ── Detail view ── */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+      gap: 1.25rem 2rem;
+    }
+
+    .detail-field { display: flex; flex-direction: column; gap: 0.25rem; }
+
+    .detail-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .detail-value {
+      font-size: 0.9rem;
+      color: #1e293b;
+      font-weight: 500;
+    }
+
+    .detail-value-muted {
+      font-size: 0.88rem;
+      color: #64748b;
+      font-style: italic;
+    }
+
+    .detail-section {
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .detail-section-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 1rem;
+    }
+
+    /* ── Action row (form footer) ── */
+    .form-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid #f1f5f9;
+      margin-top: 1.25rem;
+    }
+
+    /* ── Prototype notes ── */
+    .prototype-notes {
+      background: #fffbeb;
+      border: 1px solid #fcd34d;
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+      margin-top: 2rem;
+      font-size: 0.82rem;
+      color: #92400e;
+    }
+
+    .prototype-notes strong {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .prototype-notes ul {
+      list-style: disc;
+      padding-left: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    /* ── UUID style ── */
+    .uuid-text {
+      font-family: 'Courier New', monospace;
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1px solid #f1f5f9;
+      margin: 1.25rem 0;
+    }
+
+    /* ── Toggle switch visual ── */
+    .p-toggleswitch {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      gap: 0.5rem;
+    }
+    .toggle-track {
+      width: 2.5rem;
+      height: 1.35rem;
+      border-radius: 999px;
+      background: #cbd5e1;
+      position: relative;
+      transition: background 0.2s;
+    }
+    .toggle-track.on { background: #3b82f6; }
+    .toggle-thumb {
+      position: absolute;
+      top: 0.17rem;
+      left: 0.17rem;
+      width: 1rem;
+      height: 1rem;
+      border-radius: 50%;
+      background: #fff;
+      transition: left 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .toggle-track.on .toggle-thumb { left: 1.33rem; }
+
+    /* ── Responsive tweak ── */
+    @media (max-width: 768px) {
+      .layout-sidebar { display: none; }
+      .layout-main-container { margin-left: 0; padding: 5.5rem 1rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Prototype badge ── -->
+<div class="prototype-badge">🎨 PROTÓTIPO — não é o sistema real</div>
+
+<!-- ── Topbar ── -->
+<header class="layout-topbar">
+  <a class="layout-topbar-logo" href="#" onclick="return false;">
+    <strong>Sakai</strong><span> Sistema</span>
+  </a>
+  <div class="layout-topbar-actions">
+    <button class="topbar-icon-btn" title="Alternar tema" aria-label="Alternar tema">🌙</button>
+    <button class="topbar-icon-btn" title="Configurações" aria-label="Configurações">⚙️</button>
+    <div class="p-avatar" title="Administrador" aria-label="Usuário: Administrador">AD</div>
+  </div>
+</header>
+
+<!-- ── Sidebar ── -->
+<aside class="layout-sidebar">
+  <ul class="layout-menu">
+    <li>
+      <span class="layout-menuitem-root-text">Cadastros</span>
+      <ul>
+        <li>
+          <a id="menu-list" class="active-route"
+             href="#"
+             onclick="showScreen('screen-list'); updateMenu('menu-list'); return false;"
+             aria-current="page">
+            <i class="menu-icon">🖥️</i> Sistemas
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <span class="layout-menuitem-root-text">Outros módulos</span>
+      <ul>
+        <li>
+          <a href="#" onclick="return false;" style="opacity:.45;cursor:not-allowed;">
+            <i class="menu-icon">📦</i> Funcionalidades
+          </a>
+        </li>
+        <li>
+          <a href="#" onclick="return false;" style="opacity:.45;cursor:not-allowed;">
+            <i class="menu-icon">📊</i> Pontos de Função
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</aside>
+
+<!-- ── Main ── -->
+<div class="layout-main-container">
+  <main class="layout-main">
+
+    <!-- ════════════════════════════════════════════════════════════
+         TELA 1 — Pesquisar Sistema (listagem)
+    ═══════════════════════════════════════════════════════════════ -->
+    <div id="screen-list" class="screen active">
+
+      <nav class="p-breadcrumb" aria-label="Navegação estrutural">
+        <span class="p-breadcrumb-current">Sistemas</span>
+      </nav>
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Pesquisar Sistema</h1>
+          <p class="page-subtitle">Últimos 30 sistemas cadastrados na organização</p>
+        </div>
+        <button class="p-button p-button-primary"
+                onclick="showScreen('screen-new'); updateMenu('menu-list');">
+          ➕ Incluir Sistema
+        </button>
+      </div>
+
+      <!-- Filtros -->
+      <div class="card">
+        <div class="filter-area">
+          <div class="p-field" style="min-width:16rem;">
+            <label for="filter-nome">Nome</label>
+            <input id="filter-nome" class="p-inputtext"
+                   type="text" placeholder="Ex.: Atlas"
+                   style="min-width:16rem;" maxlength="255" />
+          </div>
+          <div class="p-field" style="min-width:9rem;">
+            <label for="filter-sigla">Sigla</label>
+            <input id="filter-sigla" class="p-inputtext"
+                   type="text" placeholder="Ex.: ATL01"
+                   style="min-width:9rem;" maxlength="5" />
+          </div>
+          <button class="p-button p-button-primary"
+                  onclick="showToast('info','Pesquisa realizada','Exibindo resultados para os filtros informados.')">
+            🔍 Pesquisar
+          </button>
+          <button class="p-button p-button-secondary"
+                  onclick="document.getElementById('filter-nome').value='';document.getElementById('filter-sigla').value='';">
+            Limpar
+          </button>
+        </div>
+
+        <!-- Tabela de resultados -->
+        <div style="overflow-x:auto;">
+          <table class="p-datatable" aria-label="Lista de sistemas">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Sigla</th>
+                <th style="text-align:right;">Qtd. Funcionalidades</th>
+                <th style="text-align:right;">Tamanho Baseline</th>
+                <th style="text-align:right;">Total PF Mensurados</th>
+                <th>Status</th>
+                <th class="p-column-actions">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="uuid-text">a1b2c3d4</span></td>
+                <td><strong style="color:#1e293b;">Atlas</strong></td>
+                <td><code style="background:#f1f5f9;padding:0.15rem 0.45rem;border-radius:4px;font-size:0.8rem;">ATL01</code></td>
+                <td style="text-align:right;">142</td>
+                <td style="text-align:right;">1.840</td>
+                <td style="text-align:right;">1.740</td>
+                <td><span class="p-tag p-tag-success">● Ativo</span></td>
+                <td class="p-column-actions">
+                  <button class="p-button p-button-secondary p-button-sm p-button-icon-only"
+                          title="Visualizar" aria-label="Visualizar Atlas"
+                          onclick="showScreen('screen-detail'); updateMenu('menu-list');">👁</button>
+                  <button class="p-button p-button-secondary p-button-sm p-button-icon-only"
+                          title="Editar" aria-label="Editar Atlas"
+                          onclick="loadEditScreen('ATL01','Atlas'); showScreen('screen-edit'); updateMenu('menu-list');">✏️</button>
+                  <button class="p-button p-button-text p-button-sm p-button-icon-only"
+                          title="Inativar" aria-label="Inativar Atlas"
+                          onclick="toggleModal('modal-toggle-status',true,'Atlas','inativar')">⏸</button>
+                  <button class="p-button p-button-text p-button-sm p-button-icon-only"
+                          title="Excluir" aria-label="Excluir Atlas"
+                          onclick="toggleModal('modal-delete',true,'Atlas')">🗑</button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="uuid-text">e5f6a7b8</span></td>
+                <td><strong style="color:#1e293b;">Nexus Financeiro</strong></td>
+                <td><code style="background:#f1f5f9;padding:0.15rem 0.45rem;border-radius:4px;font-size:0.8rem;">NEXUS</code></td>
+                <td style="text-align:right;">87</td>
+                <td style="text-align:right;">920</td>
+                <td style="text-align:right;">905</td>
+                <td><span class="p-tag p-tag-success">● Ativo</span></td>
+                <td class="p-column-actions">
+                  <button class="p-button p-button-secondary p-button-sm p-button-icon-only"
+                          title="Visualizar" aria-label="Visualizar Nexus Financeiro"
+                          onclick="showScreen('screen-detail'); updateMenu('menu-list');">👁</button>
+                  <button class="p-button p-button-secondary p-button-sm p-button-icon-only"
+                          title="Editar" aria-label="Editar Nexus Financeiro"
+                          onclick="loadEditScreen('NEXUS','Nexus Financeiro'); showScreen('screen-edit'); updateMenu('menu-list');">✏️</button>
+                  <button class="p-button p-button-text p-button-sm p-button-icon-only"
+                          title="Inativar" aria-label="Inativar Nexus Financeiro"
+                          onclick="toggleModal('modal-toggle-status',true,'Nexus Financeiro','inativar')">⏸</button>
+                  <button class="p-button p-button-text p-button-sm p-button-icon-only"
+                          title="Excluir" aria-label="Excluir Nexus Financeiro"
+                          onclick="toggleModal('modal-delete',true,'Nexus Financeiro')">🗑</button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="uuid-text">c9d0e1f2</span></td>
+                <td><strong style="color:#1e293b;">Orion RH</strong></td>
+                <td><code style="background:#f1f5f9;padding:0.15rem 0.45rem;border-radius:4px;font-size:0.8rem;">ORHRH</code></td>
+                <td style="text-align:right;">210</td>
+                <td style="text-align:right;">3.150</td>
+                <td style="text-align:right;">3.120</td>
+                <td><span class="p-tag p-tag-danger">● Inativo</span></td>
+                <td class="p-column-actions">
+                  <button class="p-button p-button-secondary p-button-sm p-button-icon-only"
+                          title="Visualizar" aria-label="Visualizar Orion RH"
+                          onclick="showScreen('screen-detail'); updateMenu('menu-list');">👁</button>
+                  <button class="p-button p-button-secondary p-button-sm p-button-icon-only"
+                          title="Editar" aria-label="Editar Orion RH"
+                          onclick="loadEditScreen('ORHRH','Orion RH'); showScreen('screen-edit'); updateMenu('menu-list');">✏️</button>
+                  <button class="p-button p-button-text p-button-sm p-button-icon-only"
+                          title="Ativar" aria-label="Ativar Orion RH"
+                          onclick="toggleModal('modal-toggle-status',true,'Orion RH','ativar')">▶️</button>
+                  <button class="p-button p-button-text p-button-sm p-button-icon-only"
+                          title="Excluir" aria-label="Excluir Orion RH"
+                          onclick="toggleModal('modal-delete',true,'Orion RH')">🗑</button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="uuid-text">g3h4i5j6</span></td>
+                <td><strong style="color:#1e293b;">Vega Contábil</strong></td>
+                <td><code style="background:#f1f5f9;padding:0.15rem 0.45rem;border-radius:4px;font-size:0.8rem;">VEGAC</code></td>
+                <td style="text-align:right;">56</td>
+                <td style="text-align:right;">640</td>
+                <td style="text-align:right;">590</td>
+                <td><span class="p-tag p-tag-success">● Ativo</span></td>
+                <td class="p-column-actions">
+                  <button class="p-button p-button-secondary p-button-sm p-button-icon-only"
+                          title="Visualizar" aria-label="Visualizar Vega Contábil"
+                          onclick="showScreen('screen-detail'); updateMenu('menu-list');">👁</button>
+                  <button class="p-button p-button-secondary p-button-sm p-button-icon-only"
+                          title="Editar" aria-label="Editar Vega Contábil"
+                          onclick="loadEditScreen('VEGAC','Vega Contábil'); showScreen('screen-edit'); updateMenu('menu-list');">✏️</button>
+                  <button class="p-button p-button-text p-button-sm p-button-icon-only"
+                          title="Inativar" aria-label="Inativar Vega Contábil"
+                          onclick="toggleModal('modal-toggle-status',true,'Vega Contábil','inativar')">⏸</button>
+                  <button class="p-button p-button-text p-button-sm p-button-icon-only"
+                          title="Excluir" aria-label="Excluir Vega Contábil"
+                          onclick="toggleModal('modal-delete',true,'Vega Contábil')">🗑</button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="uuid-text">k7l8m9n0</span></td>
+                <td><strong style="color:#1e293b;">Polaris Logística</strong></td>
+                <td><code style="background:#f1f5f9;padding:0.15rem 0.45rem;border-radius:4px;font-size:0.8rem;">POLLS</code></td>
+                <td style="text-align:right;">33</td>
+                <td style="text-align:right;">410</td>
+                <td style="text-align:right;">395</td>
+                <td><span class="p-tag p-tag-success">● Ativo</span></td>
+                <td class="p-column-actions">
+                  <button class="p-button p-button-secondary p-button-sm p-button-icon-only"
+                          title="Visualizar" aria-label="Visualizar Polaris Logística"
+                          onclick="showScreen('screen-detail'); updateMenu('menu-list');">👁</button>
+                  <button class="p-button p-button-secondary p-button-sm p-button-icon-only"
+                          title="Editar" aria-label="Editar Polaris Logística"
+                          onclick="loadEditScreen('POLLS','Polaris Logística'); showScreen('screen-edit'); updateMenu('menu-list');">✏️</button>
+                  <button class="p-button p-button-text p-button-sm p-button-icon-only"
+                          title="Inativar" aria-label="Inativar Polaris Logística"
+                          onclick="toggleModal('modal-toggle-status',true,'Polaris Logística','inativar')">⏸</button>
+                  <button class="p-button p-button-text p-button-sm p-button-icon-only"
+                          title="Excluir" aria-label="Excluir Polaris Logística"
+                          onclick="toggleModal('modal-delete',true,'Polaris Logística')">🗑</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Paginador -->
+        <div class="p-paginator" role="navigation" aria-label="Paginação">
+          <span class="p-paginator-info">Exibindo 1–5 de 23 resultados</span>
+          <button class="p-paginator-btn" disabled aria-label="Primeira página">«</button>
+          <button class="p-paginator-btn" disabled aria-label="Página anterior">‹</button>
+          <button class="p-paginator-btn active" aria-current="page">1</button>
+          <button class="p-paginator-btn">2</button>
+          <button class="p-paginator-btn" aria-label="Próxima página">›</button>
+          <button class="p-paginator-btn" aria-label="Última página">»</button>
+        </div>
+      </div>
+
+      <!-- Estado Vazio (oculto por padrão — toggle para visualizar) -->
+      <div id="empty-state-demo" style="display:none;">
+        <div class="card">
+          <div class="p-empty-state">
+            <div class="p-empty-state-icon">🖥️</div>
+            <p class="p-empty-state-title">Nenhum sistema cadastrado</p>
+            <p class="p-empty-state-desc">Clique em "Incluir Sistema" para começar a registrar os sistemas da sua organização.</p>
+            <button class="p-button p-button-primary"
+                    onclick="showScreen('screen-new'); updateMenu('menu-list');">
+              ➕ Incluir Sistema
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado Vazio — pesquisa sem resultado (oculto) -->
+      <div id="empty-search-demo" style="display:none;">
+        <div class="card">
+          <div class="p-empty-state">
+            <div class="p-empty-state-icon">🔍</div>
+            <p class="p-empty-state-title">Nenhum sistema encontrado</p>
+            <p class="p-empty-state-desc">Nenhum sistema encontrado para os filtros informados.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botões para demonstrar estados alternativos -->
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem;">
+        <button class="p-button p-button-text p-button-sm"
+                onclick="document.getElementById('empty-state-demo').style.display='block';document.getElementById('empty-search-demo').style.display='none';">
+          ▶ Ver estado: sem cadastros
+        </button>
+        <button class="p-button p-button-text p-button-sm"
+                onclick="document.getElementById('empty-search-demo').style.display='block';document.getElementById('empty-state-demo').style.display='none';">
+          ▶ Ver estado: pesquisa sem resultado
+        </button>
+        <button class="p-button p-button-text p-button-sm"
+                onclick="document.getElementById('empty-state-demo').style.display='none';document.getElementById('empty-search-demo').style.display='none';">
+          ✕ Fechar estados alternativos
+        </button>
+      </div>
+
+    </div><!-- /screen-list -->
+
+
+    <!-- ════════════════════════════════════════════════════════════
+         TELA 2 — Visualizar Sistema
+    ═══════════════════════════════════════════════════════════════ -->
+    <div id="screen-detail" class="screen">
+
+      <nav class="p-breadcrumb" aria-label="Navegação estrutural">
+        <a href="#" onclick="showScreen('screen-list'); updateMenu('menu-list'); return false;">Sistemas</a>
+        <span class="p-breadcrumb-sep">›</span>
+        <span class="p-breadcrumb-current">Atlas</span>
+      </nav>
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Visualizar Sistema</h1>
+          <p class="page-subtitle">Dados completos do sistema em modo somente leitura</p>
+        </div>
+        <div style="display:flex;gap:.5rem;">
+          <button class="p-button p-button-secondary"
+                  onclick="showScreen('screen-list'); updateMenu('menu-list');">
+            ← Voltar
+          </button>
+          <button class="p-button p-button-primary"
+                  onclick="loadEditScreen('ATL01','Atlas'); showScreen('screen-edit'); updateMenu('menu-list');">
+            ✏️ Editar
+          </button>
+        </div>
+      </div>
+
+      <!-- Status banner -->
+      <div class="p-message p-message-info" role="status">
+        <span>ℹ️</span>
+        <span>Este registro está em modo somente leitura. Use o botão <strong>Editar</strong> para alterar os dados.</span>
+      </div>
+
+      <!-- Dados do sistema -->
+      <div class="card">
+        <p class="form-section-title">Identificação</p>
+        <div class="detail-grid">
+          <div class="detail-field">
+            <span class="detail-label">ID</span>
+            <span class="uuid-text" style="font-size:.85rem;">a1b2c3d4-e5f6-7890-abcd-ef1234567890</span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">Nome</span>
+            <span class="detail-value">Atlas</span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">Sigla</span>
+            <span class="detail-value">
+              <code style="background:#f1f5f9;padding:0.2rem 0.55rem;border-radius:4px;">ATL01</code>
+            </span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">Apelido</span>
+            <span class="detail-value">Atlas Core</span>
+          </div>
+          <div class="detail-field">
+            <span class="detail-label">Status</span>
+            <span class="detail-value"><span class="p-tag p-tag-success">● Ativo</span></span>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <p class="detail-section-title">Informações gerais</p>
+          <div class="detail-grid">
+            <div class="detail-field" style="grid-column: span 2;">
+              <span class="detail-label">Descrição</span>
+              <span class="detail-value" style="font-weight:400;line-height:1.5;color:#334155;">
+                Sistema de gestão de ativos integrado à cadeia de fornecimento, responsável pelo controle de inventário em tempo real e rastreabilidade de materiais.
+              </span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Responsável técnico</span>
+              <span class="detail-value">Carla Mendonça</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Área de negócio</span>
+              <span class="detail-value">Cadeia de Suprimentos</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <p class="detail-section-title">Métricas</p>
+          <div class="detail-grid">
+            <div class="detail-field">
+              <span class="detail-label">Qtd. de Funcionalidades</span>
+              <span class="detail-value">142</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Tamanho Baseline</span>
+              <span class="detail-value">1.840 PF</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Total PF Mensurados</span>
+              <span class="detail-value">1.740 PF</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <p class="detail-section-title">Auditoria</p>
+          <div class="detail-grid">
+            <div class="detail-field">
+              <span class="detail-label">Criado em</span>
+              <span class="detail-value" style="font-weight:400;">12/03/2024 às 09h32</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Criado por</span>
+              <span class="detail-value" style="font-weight:400;">roberto.lima@empresa.com.br</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Última alteração</span>
+              <span class="detail-value" style="font-weight:400;">07/05/2025 às 14h15</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Alterado por</span>
+              <span class="detail-value" style="font-weight:400;">carla.mendonca@empresa.com.br</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /screen-detail -->
+
+
+    <!-- ════════════════════════════════════════════════════════════
+         TELA 3 — Incluir Sistema (novo)
+    ═══════════════════════════════════════════════════════════════ -->
+    <div id="screen-new" class="screen">
+
+      <nav class="p-breadcrumb" aria-label="Navegação estrutural">
+        <a href="#" onclick="showScreen('screen-list'); updateMenu('menu-list'); return false;">Sistemas</a>
+        <span class="p-breadcrumb-sep">›</span>
+        <span class="p-breadcrumb-current">Incluir Sistema</span>
+      </nav>
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Incluir Sistema</h1>
+          <p class="page-subtitle">Preencha os dados para cadastrar um novo sistema</p>
+        </div>
+        <button class="p-button p-button-secondary"
+                onclick="showScreen('screen-list'); updateMenu('menu-list');">
+          ← Voltar
+        </button>
+      </div>
+
+      <div class="card">
+        <p class="form-section-title">Identificação</p>
+
+        <div class="form-row">
+          <div class="p-field form-col-2">
+            <label for="new-nome">Nome <span class="required-star">*</span></label>
+            <input id="new-nome" class="p-inputtext" type="text"
+                   placeholder="Ex.: Atlas" maxlength="255" />
+          </div>
+          <div class="p-field form-col">
+            <label for="new-sigla">Sigla <span class="required-star">*</span></label>
+            <input id="new-sigla" class="p-inputtext" type="text"
+                   placeholder="ATL01" maxlength="5"
+                   style="text-transform:uppercase;" />
+            <span class="p-help">Exatamente 5 caracteres alfanuméricos, único por organização</span>
+          </div>
+          <div class="p-field form-col">
+            <label for="new-apelido">Apelido <span class="optional-label">(opcional)</span></label>
+            <input id="new-apelido" class="p-inputtext" type="text"
+                   placeholder="Nome informal do sistema" maxlength="100" />
+          </div>
+        </div>
+
+        <!-- Exemplo de campo com erro de validação -->
+        <div class="form-row">
+          <div class="p-field form-col">
+            <label for="new-sigla-invalid">Sigla com erro de exemplo <span class="required-star">*</span></label>
+            <input id="new-sigla-invalid" class="p-inputtext p-invalid" type="text"
+                   value="ATL" maxlength="5" />
+            <span class="p-error">⚠️ A sigla deve ter exatamente 5 caracteres alfanuméricos</span>
+            <span class="p-help" style="color:#94a3b8;">(exemplo visual de validação — campo não funcional)</span>
+          </div>
+        </div>
+
+        <hr class="divider" />
+        <p class="form-section-title">Informações gerais</p>
+
+        <div class="form-row">
+          <div class="p-field form-col-full">
+            <label for="new-descricao">Descrição <span class="optional-label">(opcional)</span></label>
+            <textarea id="new-descricao" class="p-textarea"
+                      placeholder="Descreva brevemente a finalidade do sistema"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="p-field form-col">
+            <label for="new-responsavel">Responsável técnico <span class="optional-label">(opcional)</span></label>
+            <input id="new-responsavel" class="p-inputtext" type="text"
+                   placeholder="Ex.: Carla Mendonça" maxlength="150" />
+          </div>
+          <div class="p-field form-col">
+            <label for="new-area">Área de negócio <span class="optional-label">(opcional)</span></label>
+            <input id="new-area" class="p-inputtext" type="text"
+                   placeholder="Ex.: Cadeia de Suprimentos" maxlength="150" />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="p-button p-button-text"
+                  onclick="showScreen('screen-list'); updateMenu('menu-list');">
+            Cancelar
+          </button>
+          <button class="p-button p-button-primary"
+                  onclick="showScreen('screen-list'); updateMenu('menu-list'); showToast('success','Sistema cadastrado','O sistema foi incluído com sucesso.');">
+            Salvar
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /screen-new -->
+
+
+    <!-- ════════════════════════════════════════════════════════════
+         TELA 4 — Editar Sistema
+    ═══════════════════════════════════════════════════════════════ -->
+    <div id="screen-edit" class="screen">
+
+      <nav class="p-breadcrumb" aria-label="Navegação estrutural">
+        <a href="#" onclick="showScreen('screen-list'); updateMenu('menu-list'); return false;">Sistemas</a>
+        <span class="p-breadcrumb-sep">›</span>
+        <span id="edit-breadcrumb-name" class="p-breadcrumb-current">Editar Sistema</span>
+      </nav>
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Editar Sistema</h1>
+          <p class="page-subtitle" id="edit-subtitle">Altere os dados do sistema e salve para confirmar</p>
+        </div>
+        <button class="p-button p-button-secondary"
+                onclick="showScreen('screen-list'); updateMenu('menu-list');">
+          ← Voltar
+        </button>
+      </div>
+
+      <div class="card">
+        <p class="form-section-title">Identificação</p>
+
+        <div class="form-row">
+          <div class="p-field form-col-2">
+            <label for="edit-nome">Nome <span class="required-star">*</span></label>
+            <input id="edit-nome" class="p-inputtext" type="text" value="Atlas" maxlength="255" />
+          </div>
+          <div class="p-field form-col">
+            <label for="edit-sigla">Sigla <span class="required-star">*</span></label>
+            <input id="edit-sigla" class="p-inputtext" type="text" value="ATL01" maxlength="5"
+                   style="text-transform:uppercase;" />
+            <span class="p-help">Exatamente 5 caracteres alfanuméricos, único por organização</span>
+          </div>
+          <div class="p-field form-col">
+            <label for="edit-apelido">Apelido <span class="optional-label">(opcional)</span></label>
+            <input id="edit-apelido" class="p-inputtext" type="text" value="Atlas Core" maxlength="100" />
+          </div>
+        </div>
+
+        <hr class="divider" />
+        <p class="form-section-title">Informações gerais</p>
+
+        <div class="form-row">
+          <div class="p-field form-col-full">
+            <label for="edit-descricao">Descrição <span class="optional-label">(opcional)</span></label>
+            <textarea id="edit-descricao" class="p-textarea">Sistema de gestão de ativos integrado à cadeia de fornecimento, responsável pelo controle de inventário em tempo real e rastreabilidade de materiais.</textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="p-field form-col">
+            <label for="edit-responsavel">Responsável técnico <span class="optional-label">(opcional)</span></label>
+            <input id="edit-responsavel" class="p-inputtext" type="text" value="Carla Mendonça" maxlength="150"
