@@ -621,11 +621,17 @@ async function fetchAndRenderMd(filePath, targetEl) {
   }
 
 
-  // Syntax highlighting
+  // Diagramas Mermaid — extrai os blocos ```mermaid``` antes do highlight
+  const mermaidNodes = extractMermaidBlocks();
+
+  // Syntax highlighting (blocos mermaid já foram retirados do fluxo)
   document.querySelectorAll('.md-content pre code').forEach(el => {
     addCodeLangLabel(el);
     try { hljs.highlightElement(el); } catch (e) { }
   });
+
+  // Renderiza os diagramas Mermaid extraídos
+  runMermaid(mermaidNodes);
 
   // Tornar links internos (.md) navegáveis
   document.querySelectorAll('.md-content a').forEach(a => {
@@ -659,6 +665,63 @@ function addCodeLangLabel(el) {
   label.className = 'code-lang-label';
   label.textContent = lang;
   el.closest('pre')?.appendChild(label);
+}
+
+/* ── Mermaid ── */
+function extractMermaidBlocks() {
+  // Converte <pre><code class="language-mermaid"> em <div class="mermaid"> e devolve os nós
+  const nodes = [];
+  document.querySelectorAll('.md-content pre code.language-mermaid').forEach(code => {
+    const def = code.textContent;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'mermaid';
+    wrapper.dataset.graph = def;   // guarda a fonte para re-render ao trocar de tema
+    wrapper.textContent = def;
+    code.closest('pre').replaceWith(wrapper);
+    nodes.push(wrapper);
+  });
+  return nodes;
+}
+
+function mermaidTheme() {
+  return document.documentElement.classList.contains('app-dark') ? 'dark' : 'default';
+}
+
+async function renderMermaidNode(mermaid, node, idx) {
+  // Usa mermaid.render() com a fonte guardada (não mermaid.run, que reescaparia <br/> e &quot;)
+  const def = node.dataset.graph || '';
+  try {
+    const id = 'mmd-' + Date.now() + '-' + idx;
+    const { svg, bindFunctions } = await mermaid.render(id, def);
+    node.innerHTML = svg;
+    node.setAttribute('data-processed', 'true');
+    if (bindFunctions) bindFunctions(node);
+  } catch (e) {
+    console.error('Mermaid:', e);
+    node.setAttribute('data-processed', 'error');
+    node.innerHTML = '<pre class="mermaid-error">⚠️ Não foi possível renderizar o diagrama.</pre>';
+  }
+}
+
+async function runMermaid(nodes) {
+  if (!nodes || !nodes.length || !window.__mermaidReady) return;
+  const mermaid = await window.__mermaidReady;
+  mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme(), flowchart: { htmlLabels: false } });
+  let i = 0;
+  for (const node of nodes) await renderMermaidNode(mermaid, node, i++);
+}
+
+async function rerenderMermaidForTheme() {
+  // Ao alternar tema, re-renderiza os diagramas existentes a partir da fonte guardada
+  const nodes = Array.from(document.querySelectorAll('.mermaid[data-graph]'));
+  if (!nodes.length || !window.__mermaidReady) return;
+  const mermaid = await window.__mermaidReady;
+  mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', theme: mermaidTheme(), flowchart: { htmlLabels: false } });
+  let i = 0;
+  for (const node of nodes) {
+    node.removeAttribute('data-processed');
+    await renderMermaidNode(mermaid, node, i++);
+  }
 }
 
 /* ── HTML (protótipo) ── */
@@ -775,6 +838,7 @@ function applyTheme(theme) {
   const darkSheet = document.getElementById('hljs-theme-dark');
   if (lightSheet) lightSheet.disabled = theme === 'dark';
   if (darkSheet) darkSheet.disabled = theme !== 'dark';
+  rerenderMermaidForTheme();
 }
 function toggleTheme() {
   state.theme = state.theme === 'dark' ? 'light' : 'dark';

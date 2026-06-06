@@ -25,6 +25,20 @@
   <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/languages/json.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/languages/bash.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/lib/languages/yaml.min.js"></script>
+  <!-- Mermaid para renderização de diagramas -->
+  <script>
+    // Gate de prontidão: script.js (clássico) pode referenciar mermaid antes do módulo ESM carregar
+    window.__mermaidReady = new Promise(function (resolve) {
+      if (window.mermaid) return resolve(window.mermaid);
+      window.addEventListener('mermaid:ready', function () { resolve(window.mermaid); }, { once: true });
+    });
+  </script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: false, securityLevel: 'loose', flowchart: { htmlLabels: false } });
+    window.mermaid = mermaid;
+    window.dispatchEvent(new Event('mermaid:ready'));
+  </script>
 </head>
 
 <body>
