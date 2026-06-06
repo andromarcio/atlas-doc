@@ -5,7 +5,7 @@
 **Nível 2 — Feature Set**
 **ID**: SIS-001
 
-# Manter Sistema
+# Gestão de Sistemas
 
 ---
 
