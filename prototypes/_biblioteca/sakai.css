@@ -670,6 +670,9 @@ select.p-select { padding-right: 2rem; }
 /* ── Badge de protótipo (canto da tela) ────────────────────────────────── */
 .prototype-badge {
     position: fixed; top: 0; right: 0; z-index: 2000;
+    /* à prova de esticão: mesmo se um protótipo reposicionar o badge (ex.: bottom+left)
+       sem zerar top/right, o tamanho fixo impede que ele estique e vire um bloco gigante. */
+    width: max-content; height: max-content; max-width: 100vw;
     background: var(--p-surface-800); color: #fff;
     font-size: 0.75rem; font-weight: 600;
     padding: 0.35rem 0.75rem; border-bottom-left-radius: var(--border-radius);
