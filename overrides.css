@@ -128,13 +128,13 @@ body {
   padding: 2.5rem;
 }
 
-/* ── Tela de boas-vindas ─────────────────────────────────────────── */
+/* ── Tela de boas-vindas (fica dentro do card branco) ────────────── */
 .welcome {
-  color: #e2e8f0;
+  color: #475569;
 }
 
 .welcome-title {
-  color: #f1f5f9;
+  color: #0f172a;
 }
 
 .welcome-subtitle {
@@ -142,15 +142,20 @@ body {
 }
 
 .welcome-stats .stat-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 191, 165, 0.06);
+  border: 1px solid rgba(0, 191, 165, 0.16);
   border-radius: 8px;
-  color: #94a3b8;
+  color: #475569;
 }
 
 .welcome-stats .stat-count {
   color: #00bfa5;
 }
+
+/* No modo escuro, o card fica escuro — texto claro novamente */
+.app-dark .welcome { color: #cbd5e1; }
+.app-dark .welcome-title { color: #f1f5f9; }
+.app-dark .welcome-subtitle { color: #94a3b8; }
 
 /* ── Skeleton loading ────────────────────────────────────────────── */
 .skeleton-line {
